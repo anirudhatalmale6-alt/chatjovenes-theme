@@ -418,17 +418,14 @@ img {
 .category-header-image {
     flex: 0 0 120px;
     width: 120px;
-    max-width: 120px;
     height: 120px;
     border-radius: var(--radius);
     overflow: hidden;
 }
 
 .category-header-image img {
-    width: 120px;
-    height: 120px;
-    max-width: 120px;
-    max-height: 120px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     display: block;
 }
@@ -442,10 +439,13 @@ img {
     margin-bottom: 8px;
 }
 
+.category-header-desc,
+.category-header-desc p,
 .category-header-info p {
     color: var(--text-light);
     font-size: 15px;
     line-height: 1.6;
+    margin: 0;
 }
 
 .category-chat-box {
@@ -1088,12 +1088,26 @@ body.dark-mode .chat-breadcrumb .current {
 
     .category-header {
         flex-direction: column;
-        text-align: center;
-        padding: 20px;
+        padding: 0;
+        background: none;
+        gap: 16px;
+    }
+
+    .category-header-image {
+        flex: none;
+        width: 100%;
+        height: auto;
+        border-radius: var(--radius-lg);
+    }
+
+    .category-header-image img {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16/9;
     }
 
     .category-header-info h1 {
-        font-size: 20px;
+        font-size: 22px;
     }
 
     .footer-columns {
