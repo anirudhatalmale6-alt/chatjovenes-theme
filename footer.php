@@ -1,3 +1,13 @@
+<!-- ABOUT TEXT ABOVE FOOTER -->
+<section class="footer-about">
+    <div class="container">
+        <p>ChatJovenes es una comunidad de chat en español totalmente gratis, formada por usuarios de todas partes de España, Mexico, Argentina, Chile y toda Latinoamerica en busca de nuevas amistades.</p>
+        <p>Chatear, conocer gente, ligar y hacer nuevos amigos, asi como los multiples servicios que te ofrecemos (registro de nicks, crear tu propia sala de chat, etc) son totalmente gratuitos.</p>
+        <p>Nuestro webchat, en constante evolucion, te permitira chatear comodamente sin registro, de una forma facil y clara. Con solo registrarte podras subir tus fotos y videos favoritos, y crear una pagina totalmente personalizada sobre ti y tu comunidad.</p>
+        <p>En resumen, ChatJovenes te ofrece un chat gratis para ti y para tus amigos, para que podais chatear de forma facil desde nuestra web, o incluir ese chat en la vuestra propia, para chatear en la red que mas ha crecido en los ultimos años, con el mejor ambiente, y la mejor gente.</p>
+    </div>
+</section>
+
 <footer class="site-footer">
     <div class="container">
         <div class="footer-columns">
@@ -69,7 +79,7 @@
                     </ul>
                 <?php endif; ?>
             </div>
-            <div class="footer-col">
+            <div class="footer-col footer-col-legal">
                 <?php if (is_active_sidebar('footer-4')) : ?>
                     <?php dynamic_sidebar('footer-4'); ?>
                 <?php else : ?>
@@ -84,7 +94,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            &copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?>. Todos los derechos reservados.
+            Copyright &copy; 2025-2026 Chatea desde <?php bloginfo('name'); ?> - Todos los derechos reservados.
         </div>
     </div>
 </footer>

@@ -117,6 +117,25 @@
         </div>
         <?php endif; ?>
 
+        <!-- SUBCATEGORIES -->
+        <?php
+        $subcats = get_terms(array(
+            'taxonomy'   => 'room_category',
+            'parent'     => $current_term->term_id,
+            'hide_empty' => false,
+        ));
+        if (!is_wp_error($subcats) && !empty($subcats)) :
+        ?>
+        <div class="all-rooms-section" style="margin-top: 40px;">
+            <h2 class="section-title" style="font-size: 20px; margin-bottom: 20px;">Subcategorias</h2>
+            <div class="all-rooms-links">
+                <?php foreach ($subcats as $subcat) : ?>
+                    <a href="<?php echo esc_url(get_term_link($subcat)); ?>" class="room-link"><?php echo esc_html($subcat->name); ?></a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+
         <!-- ALL ROOMS AS TEXT LINKS -->
         <?php
         $all_args = array(
