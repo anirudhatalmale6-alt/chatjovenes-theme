@@ -31,7 +31,6 @@
             <span></span>
             <span></span>
         </button>
-        <script>document.getElementById('menuToggle').addEventListener('click',function(){document.getElementById('mainNav').classList.toggle('active');});</script>
 
         <nav class="main-nav" id="mainNav">
             <?php
@@ -44,6 +43,23 @@
         </nav>
     </div>
 </header>
+<script>
+(function(){
+    var btn = document.getElementById('menuToggle');
+    var nav = document.getElementById('mainNav');
+    if (btn && nav) {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            nav.classList.toggle('active');
+        });
+        document.addEventListener('click', function(e) {
+            if (!nav.contains(e.target) && !btn.contains(e.target)) {
+                nav.classList.remove('active');
+            }
+        });
+    }
+})();
+</script>
 <?php
 function chatjovenes_fallback_menu() {
     $categories = get_terms(array(
