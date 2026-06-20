@@ -34,7 +34,7 @@
 
         <nav class="main-nav" id="mainNav">
             <ul>
-                <li><a href="<?php echo esc_url(home_url('/')); ?>">Inicio</a></li>
+                <li><a href="<?php echo esc_url(home_url('/')); ?>" class="header-btn header-btn-inicio">Inicio</a></li>
                 <?php
                 $chat_url = get_theme_mod('chat_url', '');
                 if ($chat_url) :
