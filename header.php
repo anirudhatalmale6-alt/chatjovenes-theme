@@ -17,8 +17,12 @@
                 $logo_url = wp_get_attachment_image_url($logo_id, 'full');
                 ?>
                 <img src="<?php echo esc_url($logo_url); ?>" alt="<?php bloginfo('name'); ?>">
-            <?php else : ?>
+            <?php endif; ?>
+            <?php if (!get_theme_mod('hide_site_title', false)) : ?>
                 <span><?php bloginfo('name'); ?></span>
+            <?php endif; ?>
+            <?php if (!get_theme_mod('hide_site_description', false) && get_bloginfo('description')) : ?>
+                <small style="font-size: 12px; font-weight: 400; color: var(--text-light); margin-left: 8px;"><?php bloginfo('description'); ?></small>
             <?php endif; ?>
         </a>
 

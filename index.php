@@ -19,7 +19,7 @@
         <?php
         $featured_rooms = new WP_Query(array(
             'post_type'      => 'chat_room',
-            'posts_per_page' => 6,
+            'posts_per_page' => 8,
             'meta_query'     => array(
                 array(
                     'key'   => '_featured_room',
@@ -31,7 +31,7 @@
         if (!$featured_rooms->have_posts()) {
             $featured_rooms = new WP_Query(array(
                 'post_type'      => 'chat_room',
-                'posts_per_page' => 6,
+                'posts_per_page' => 8,
             ));
         }
 
@@ -123,7 +123,7 @@
                     <?php if ($xat_embed) : ?>
                         <?php echo $xat_embed; ?>
                     <?php else : ?>
-                        <iframe src="https://xat.com/web_gear/chat/go_large.php?id=<?php echo esc_attr($xat_id); ?>" allowfullscreen></iframe>
+                        <iframe src="https://xat.com/web_gear/chat/go_large.php?id=<?php echo esc_attr($xat_id); ?>" allowfullscreen scrolling="no"></iframe>
                     <?php endif; ?>
                 </div>
             </div>

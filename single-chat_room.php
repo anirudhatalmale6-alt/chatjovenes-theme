@@ -31,7 +31,7 @@
             echo $global_embed;
         else :
         ?>
-            <iframe src="https://xat.com/web_gear/chat/go_large.php?id=<?php echo esc_attr($xat_id); ?>" allowfullscreen></iframe>
+            <iframe src="https://xat.com/web_gear/chat/go_large.php?id=<?php echo esc_attr($xat_id); ?>" allowfullscreen scrolling="no"></iframe>
         <?php endif; ?>
     </div>
     <?php endif; ?>
@@ -48,7 +48,7 @@
         $cat_ids = wp_list_pluck($room_cats, 'term_id');
         $related = new WP_Query(array(
             'post_type'      => 'chat_room',
-            'posts_per_page' => 3,
+            'posts_per_page' => 4,
             'post__not_in'   => array(get_the_ID()),
             'tax_query'      => array(
                 array(

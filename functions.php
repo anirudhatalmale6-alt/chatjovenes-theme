@@ -108,7 +108,7 @@ function chatjovenes_register_cpt() {
         ),
         'public'       => true,
         'has_archive'  => true,
-        'rewrite'      => array('slug' => 'sala'),
+        'rewrite'      => array('slug' => 'chat'),
         'supports'     => array('title', 'editor', 'thumbnail', 'excerpt'),
         'menu_icon'    => 'dashicons-format-chat',
         'show_in_rest' => true,
@@ -123,7 +123,7 @@ function chatjovenes_register_cpt() {
         ),
         'public'       => true,
         'hierarchical' => true,
-        'rewrite'      => array('slug' => 'categoria'),
+        'rewrite'      => array('slug' => 'chats'),
         'show_in_rest' => true,
     ));
 }
@@ -191,6 +191,66 @@ function chatjovenes_save_room_meta($post_id) {
 }
 add_action('save_post_chat_room', 'chatjovenes_save_room_meta');
 
+// Category image field
+function chatjovenes_category_add_image($taxonomy) {
+    ?>
+    <div class="form-field">
+        <label for="category_image">Imagen de Categoria</label>
+        <input type="text" name="category_image" id="category_image" value="">
+        <p class="description">URL de la imagen para esta categoria (o usa el boton de medios)</p>
+        <button type="button" class="button chatjovenes-upload-btn" data-target="category_image">Subir Imagen</button>
+    </div>
+    <?php
+}
+add_action('room_category_add_form_fields', 'chatjovenes_category_add_image');
+
+function chatjovenes_category_edit_image($term) {
+    $image = get_term_meta($term->term_id, 'category_image', true);
+    ?>
+    <tr class="form-field">
+        <th scope="row"><label for="category_image">Imagen de Categoria</label></th>
+        <td>
+            <input type="text" name="category_image" id="category_image" value="<?php echo esc_attr($image); ?>">
+            <p class="description">URL de la imagen para esta categoria</p>
+            <button type="button" class="button chatjovenes-upload-btn" data-target="category_image">Subir Imagen</button>
+            <?php if ($image) : ?>
+                <br><img src="<?php echo esc_url($image); ?>" style="max-width: 200px; margin-top: 10px;">
+            <?php endif; ?>
+        </td>
+    </tr>
+    <?php
+}
+add_action('room_category_edit_form_fields', 'chatjovenes_category_edit_image');
+
+function chatjovenes_save_category_image($term_id) {
+    if (isset($_POST['category_image'])) {
+        update_term_meta($term_id, 'category_image', esc_url_raw($_POST['category_image']));
+    }
+}
+add_action('created_room_category', 'chatjovenes_save_category_image');
+add_action('edited_room_category', 'chatjovenes_save_category_image');
+
+function chatjovenes_category_admin_scripts($hook) {
+    if ($hook !== 'edit-tags.php' && $hook !== 'term.php') return;
+    if (!isset($_GET['taxonomy']) || $_GET['taxonomy'] !== 'room_category') return;
+    wp_enqueue_media();
+    wp_add_inline_script('jquery-core', '
+        jQuery(document).ready(function($){
+            $(document).on("click", ".chatjovenes-upload-btn", function(e){
+                e.preventDefault();
+                var target = $(this).data("target");
+                var frame = wp.media({title: "Seleccionar Imagen", button: {text: "Usar Imagen"}, multiple: false});
+                frame.on("select", function(){
+                    var url = frame.state().get("selection").first().toJSON().url;
+                    $("#" + target).val(url);
+                });
+                frame.open();
+            });
+        });
+    ');
+}
+add_action('admin_enqueue_scripts', 'chatjovenes_category_admin_scripts');
+
 // Theme Customizer
 function chatjovenes_customizer($wp_customize) {
     // Hero Section
@@ -227,6 +287,27 @@ function chatjovenes_customizer($wp_customize) {
         'label'   => 'Texto del Boton',
         'section' => 'chatjovenes_hero',
         'type'    => 'text',
+    ));
+
+    // Header Options
+    $wp_customize->add_setting('hide_site_title', array(
+        'default'           => false,
+        'sanitize_callback' => 'wp_validate_boolean',
+    ));
+    $wp_customize->add_control('hide_site_title', array(
+        'label'   => 'Ocultar Titulo del Sitio',
+        'section' => 'title_tagline',
+        'type'    => 'checkbox',
+    ));
+
+    $wp_customize->add_setting('hide_site_description', array(
+        'default'           => false,
+        'sanitize_callback' => 'wp_validate_boolean',
+    ));
+    $wp_customize->add_control('hide_site_description', array(
+        'label'   => 'Ocultar Descripcion del Sitio',
+        'section' => 'title_tagline',
+        'type'    => 'checkbox',
     ));
 
     // Xat Chat Settings
@@ -500,3 +581,10 @@ function chatjovenes_save_license_domains($value) {
     return $value;
 }
 add_filter('pre_set_theme_mod_license_domains', 'chatjovenes_save_license_domains');
+
+// Flush rewrite rules on activation for new permalink slugs
+function chatjovenes_activate() {
+    chatjovenes_register_cpt();
+    flush_rewrite_rules();
+}
+add_action('after_switch_theme', 'chatjovenes_activate');
