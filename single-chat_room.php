@@ -30,7 +30,7 @@
                 <?php endif; ?>
                 <div class="chat-room-info">
                     <?php if ($hide_title !== '1') : ?>
-                        <h1><?php the_title(); ?></h1>
+                        <h1>Chat <?php the_title(); ?></h1>
                     <?php endif; ?>
                     <?php if (has_excerpt()) : ?>
                         <p style="color: var(--text-light); font-size: 15px; line-height: 1.6; margin-top: 8px;"><?php echo esc_html(get_the_excerpt()); ?></p>
