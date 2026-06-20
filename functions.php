@@ -147,6 +147,7 @@ function chatjovenes_room_meta_callback($post) {
     $xat_embed = get_post_meta($post->ID, '_xat_embed_code', true);
     $users_online = get_post_meta($post->ID, '_users_online', true);
     $featured = get_post_meta($post->ID, '_featured_room', true);
+    $hide_title = get_post_meta($post->ID, '_hide_title', true);
     ?>
     <table class="form-table">
         <tr>
@@ -172,6 +173,15 @@ function chatjovenes_room_meta_callback($post) {
                 </label>
             </td>
         </tr>
+        <tr>
+            <th><label for="hide_title">Ocultar Titulo</label></th>
+            <td>
+                <label>
+                    <input type="checkbox" id="hide_title" name="hide_title" value="1" <?php checked($hide_title, '1'); ?>>
+                    No mostrar el titulo en la pagina de la sala
+                </label>
+            </td>
+        </tr>
     </table>
     <?php
 }
@@ -188,6 +198,7 @@ function chatjovenes_save_room_meta($post_id) {
         update_post_meta($post_id, '_users_online', intval($_POST['users_online']));
     }
     update_post_meta($post_id, '_featured_room', isset($_POST['featured_room']) ? '1' : '0');
+    update_post_meta($post_id, '_hide_title', isset($_POST['hide_title']) ? '1' : '0');
 }
 add_action('save_post_chat_room', 'chatjovenes_save_room_meta');
 

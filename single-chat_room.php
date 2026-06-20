@@ -5,6 +5,7 @@
         $xat_embed_room = get_post_meta(get_the_ID(), '_xat_embed_code', true);
         $users = get_post_meta(get_the_ID(), '_users_online', true);
         $room_cats = get_the_terms(get_the_ID(), 'room_category');
+        $hide_title = get_post_meta(get_the_ID(), '_hide_title', true);
     ?>
 
     <!-- BREADCRUMB -->
@@ -28,7 +29,9 @@
                     </div>
                 <?php endif; ?>
                 <div class="chat-room-info">
-                    <h1><?php the_title(); ?></h1>
+                    <?php if ($hide_title !== '1') : ?>
+                        <h1><?php the_title(); ?></h1>
+                    <?php endif; ?>
                     <?php if (has_excerpt()) : ?>
                         <p style="color: var(--text-light); font-size: 15px; line-height: 1.6; margin-top: 8px;"><?php echo esc_html(get_the_excerpt()); ?></p>
                     <?php endif; ?>
