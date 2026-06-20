@@ -54,7 +54,8 @@
             <?php endif; ?>
 
             <?php if (get_the_content()) : ?>
-            <div class="post-content">
+            <div class="post-content" style="margin-top: 30px; padding: 24px; background: var(--bg-section); border-radius: 12px;">
+                <h2 style="font-size: 22px; margin-bottom: 12px;">Descripcion de la sala <?php the_title(); ?></h2>
                 <?php the_content(); ?>
             </div>
             <?php endif; ?>
