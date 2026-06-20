@@ -33,17 +33,14 @@
         </button>
 
         <nav class="main-nav" id="mainNav">
-            <?php
-            if (has_nav_menu('primary')) {
-                wp_nav_menu(array(
-                    'theme_location' => 'primary',
-                    'container'      => false,
-                ));
-            } else {
-            ?>
             <ul>
                 <li><a href="<?php echo esc_url(home_url('/')); ?>">Inicio</a></li>
-                <li><a href="<?php echo esc_url(get_theme_mod('chat_url', home_url('/'))); ?>" class="header-btn header-btn-chat">Entrar al Chat</a></li>
+                <?php
+                $chat_url = get_theme_mod('chat_url', '');
+                if ($chat_url) :
+                ?>
+                <li><a href="<?php echo esc_url($chat_url); ?>" class="header-btn header-btn-chat">Entrar al Chat</a></li>
+                <?php endif; ?>
                 <?php
                 $fb_url = get_theme_mod('facebook_group_url', '');
                 if ($fb_url) :
@@ -57,7 +54,6 @@
                 <li><a href="<?php echo esc_url($wa_url); ?>" class="header-btn header-btn-whatsapp" target="_blank" rel="noopener">Grupo WhatsApp</a></li>
                 <?php endif; ?>
             </ul>
-            <?php } ?>
         </nav>
 
         <?php
