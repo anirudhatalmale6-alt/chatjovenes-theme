@@ -1,91 +1,249 @@
 <?php get_header(); ?>
 
-<div class="container" style="padding: 40px 20px;">
+<div class="container" style="padding: 30px 20px;">
     <?php if (have_posts()) : while (have_posts()) : the_post();
         $xat_id = get_post_meta(get_the_ID(), '_xat_chat_id', true);
         $users = get_post_meta(get_the_ID(), '_users_online', true);
         $room_cats = get_the_terms(get_the_ID(), 'room_category');
     ?>
 
-    <div style="margin-bottom: 30px;">
-        <h1 style="font-size: 32px; margin-bottom: 8px;"><?php the_title(); ?></h1>
-        <div class="post-meta">
-            <?php if ($room_cats && !is_wp_error($room_cats)) : ?>
-                <?php foreach ($room_cats as $i => $rc) : ?>
-                    <?php if ($i > 0) echo ', '; ?>
-                    <a href="<?php echo esc_url(get_term_link($rc)); ?>"><?php echo esc_html($rc->name); ?></a>
-                <?php endforeach; ?>
-                &bull;
-            <?php endif; ?>
-            <?php if ($users) : ?>
-                <span class="users-online"><?php echo intval($users); ?> usuarios en linea</span>
-            <?php endif; ?>
-        </div>
-    </div>
-
-    <?php if ($xat_id) : ?>
-    <div class="chat-embed-wrapper" style="margin-bottom: 30px;">
-        <?php
-        $global_embed = get_theme_mod('xat_embed_code', '');
-        if ($global_embed) :
-            echo $global_embed;
-        else :
-        ?>
-            <iframe src="https://xat.com/web_gear/chat/go_large.php?id=<?php echo esc_attr($xat_id); ?>" allowfullscreen scrolling="no"></iframe>
+    <!-- BREADCRUMB -->
+    <nav class="chat-breadcrumb">
+        <a href="<?php echo esc_url(home_url('/')); ?>">Inicio</a>
+        <?php if ($room_cats && !is_wp_error($room_cats)) : ?>
+            <span>/</span>
+            <a href="<?php echo esc_url(get_term_link($room_cats[0])); ?>"><?php echo esc_html($room_cats[0]->name); ?></a>
         <?php endif; ?>
-    </div>
-    <?php endif; ?>
+        <span>/</span>
+        <span class="current"><?php the_title(); ?></span>
+    </nav>
 
-    <?php if (get_the_content()) : ?>
-    <div class="post-content" style="max-width: 800px;">
-        <?php the_content(); ?>
-    </div>
-    <?php endif; ?>
-
-    <!-- RELATED ROOMS -->
-    <?php
-    if ($room_cats && !is_wp_error($room_cats)) :
-        $cat_ids = wp_list_pluck($room_cats, 'term_id');
-        $related = new WP_Query(array(
-            'post_type'      => 'chat_room',
-            'posts_per_page' => 4,
-            'post__not_in'   => array(get_the_ID()),
-            'tax_query'      => array(
-                array(
-                    'taxonomy' => 'room_category',
-                    'field'    => 'term_id',
-                    'terms'    => $cat_ids,
-                ),
-            ),
-        ));
-        if ($related->have_posts()) :
-    ?>
-    <section style="margin-top: 50px;">
-        <h2 class="section-title">Salas Relacionadas</h2>
-        <div class="rooms-grid">
-            <?php while ($related->have_posts()) : $related->the_post(); ?>
-            <article class="room-card">
+    <div class="chat-room-layout">
+        <!-- MAIN CONTENT -->
+        <div class="chat-room-main">
+            <div class="chat-room-header">
                 <?php if (has_post_thumbnail()) : ?>
-                    <a href="<?php the_permalink(); ?>">
-                        <?php the_post_thumbnail('room-thumbnail', array('class' => 'room-card-image')); ?>
-                    </a>
-                <?php else : ?>
-                    <a href="<?php the_permalink(); ?>">
-                        <div class="room-card-image" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; font-weight: 700;"><?php echo esc_html(mb_substr(get_the_title(), 0, 2)); ?></div>
-                    </a>
+                    <div class="chat-room-thumb">
+                        <?php the_post_thumbnail('room-thumbnail'); ?>
+                    </div>
                 <?php endif; ?>
-                <div class="room-card-body">
-                    <h3 class="room-card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-                    <a href="<?php the_permalink(); ?>" class="room-card-btn" style="margin-top: 12px;">Entrar</a>
+                <div class="chat-room-info">
+                    <h1><?php the_title(); ?></h1>
+                    <div class="post-meta">
+                        <?php if ($room_cats && !is_wp_error($room_cats)) : ?>
+                            <?php foreach ($room_cats as $i => $rc) : ?>
+                                <?php if ($i > 0) echo ', '; ?>
+                                <a href="<?php echo esc_url(get_term_link($rc)); ?>"><?php echo esc_html($rc->name); ?></a>
+                            <?php endforeach; ?>
+                            &bull;
+                        <?php endif; ?>
+                        <?php if ($users) : ?>
+                            <span class="users-online"><?php echo intval($users); ?> usuarios en linea</span>
+                        <?php endif; ?>
+                    </div>
                 </div>
-            </article>
-            <?php endwhile; wp_reset_postdata(); ?>
+            </div>
+
+            <?php
+            $global_embed = get_theme_mod('xat_embed_code', '');
+            if ($global_embed || $xat_id) :
+            ?>
+            <div class="chat-embed-wrapper" style="margin: 20px 0 30px;">
+                <?php if ($global_embed) : ?>
+                    <?php echo $global_embed; ?>
+                <?php elseif ($xat_id) : ?>
+                    <iframe src="https://xat.com/web_gear/chat/go_large.php?id=<?php echo esc_attr($xat_id); ?>" allowfullscreen scrolling="no"></iframe>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
+
+            <?php if (get_the_content()) : ?>
+            <div class="post-content">
+                <?php the_content(); ?>
+            </div>
+            <?php endif; ?>
+
+            <!-- RELATED ROOMS BELOW CHAT -->
+            <?php
+            if ($room_cats && !is_wp_error($room_cats)) :
+                $cat_ids = wp_list_pluck($room_cats, 'term_id');
+                $related = new WP_Query(array(
+                    'post_type'      => 'chat_room',
+                    'posts_per_page' => 4,
+                    'post__not_in'   => array(get_the_ID()),
+                    'tax_query'      => array(
+                        array(
+                            'taxonomy' => 'room_category',
+                            'field'    => 'term_id',
+                            'terms'    => $cat_ids,
+                        ),
+                    ),
+                ));
+                if ($related->have_posts()) :
+            ?>
+            <section style="margin-top: 40px;">
+                <h2 class="section-title">Salas Relacionadas</h2>
+                <div class="rooms-grid" style="grid-template-columns: repeat(2, 1fr);">
+                    <?php while ($related->have_posts()) : $related->the_post(); ?>
+                    <article class="room-card">
+                        <?php if (has_post_thumbnail()) : ?>
+                            <a href="<?php the_permalink(); ?>">
+                                <?php the_post_thumbnail('room-thumbnail', array('class' => 'room-card-image')); ?>
+                            </a>
+                        <?php else : ?>
+                            <a href="<?php the_permalink(); ?>">
+                                <div class="room-card-image" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; font-weight: 700;"><?php echo esc_html(mb_substr(get_the_title(), 0, 2)); ?></div>
+                            </a>
+                        <?php endif; ?>
+                        <div class="room-card-body">
+                            <h3 class="room-card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                            <a href="<?php the_permalink(); ?>" class="room-card-btn" style="margin-top: 12px;">Entrar</a>
+                        </div>
+                    </article>
+                    <?php endwhile; wp_reset_postdata(); ?>
+                </div>
+            </section>
+            <?php
+                endif;
+            endif;
+            ?>
         </div>
-    </section>
-    <?php
-        endif;
-    endif;
-    ?>
+
+        <!-- SIDEBAR -->
+        <aside class="chat-room-sidebar">
+            <?php if (is_active_sidebar('sidebar-1')) : ?>
+                <?php dynamic_sidebar('sidebar-1'); ?>
+            <?php else : ?>
+
+            <!-- RELATED ROOMS WIDGET -->
+            <?php
+            if ($room_cats && !is_wp_error($room_cats)) :
+                $cat_ids_sb = wp_list_pluck($room_cats, 'term_id');
+                $sidebar_related = new WP_Query(array(
+                    'post_type'      => 'chat_room',
+                    'posts_per_page' => 8,
+                    'post__not_in'   => array(get_the_ID()),
+                    'tax_query'      => array(
+                        array(
+                            'taxonomy' => 'room_category',
+                            'field'    => 'term_id',
+                            'terms'    => $cat_ids_sb,
+                        ),
+                    ),
+                ));
+                if ($sidebar_related->have_posts()) :
+            ?>
+            <div class="sidebar-widget">
+                <h3 class="sidebar-widget-title">Salas Relacionadas</h3>
+                <ul class="sidebar-room-list">
+                    <?php while ($sidebar_related->have_posts()) : $sidebar_related->the_post(); ?>
+                    <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
+                    <?php endwhile; wp_reset_postdata(); ?>
+                </ul>
+            </div>
+            <?php endif; endif; ?>
+
+            <!-- RECENT POSTS -->
+            <?php
+            $recent_posts = new WP_Query(array(
+                'post_type'      => 'post',
+                'posts_per_page' => 5,
+            ));
+            if ($recent_posts->have_posts()) :
+            ?>
+            <div class="sidebar-widget">
+                <h3 class="sidebar-widget-title">Publicaciones Recientes</h3>
+                <ul class="sidebar-room-list">
+                    <?php while ($recent_posts->have_posts()) : $recent_posts->the_post(); ?>
+                    <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
+                    <?php endwhile; wp_reset_postdata(); ?>
+                </ul>
+            </div>
+            <?php endif; ?>
+
+            <!-- RECENT COMMENTS -->
+            <?php
+            $recent_comments = get_comments(array(
+                'number' => 5,
+                'status' => 'approve',
+            ));
+            if (!empty($recent_comments)) :
+            ?>
+            <div class="sidebar-widget">
+                <h3 class="sidebar-widget-title">Comentarios Recientes</h3>
+                <ul class="sidebar-room-list">
+                    <?php foreach ($recent_comments as $comment) : ?>
+                    <li>
+                        <a href="<?php echo esc_url(get_comment_link($comment)); ?>">
+                            <?php echo esc_html($comment->comment_author); ?> en <?php echo esc_html(get_the_title($comment->comment_post_ID)); ?>
+                        </a>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <?php endif; ?>
+
+            <!-- TOP CHANNELS -->
+            <?php
+            $top_channels = new WP_Query(array(
+                'post_type'      => 'chat_room',
+                'posts_per_page' => 8,
+                'orderby'        => 'comment_count',
+                'order'          => 'DESC',
+            ));
+            if ($top_channels->have_posts()) :
+            ?>
+            <div class="sidebar-widget">
+                <h3 class="sidebar-widget-title">Top Canales</h3>
+                <ul class="sidebar-room-list">
+                    <?php while ($top_channels->have_posts()) : $top_channels->the_post(); ?>
+                    <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
+                    <?php endwhile; wp_reset_postdata(); ?>
+                </ul>
+            </div>
+            <?php endif; ?>
+
+            <!-- LATEST CHANNELS -->
+            <?php
+            $latest_channels = new WP_Query(array(
+                'post_type'      => 'chat_room',
+                'posts_per_page' => 8,
+                'orderby'        => 'date',
+                'order'          => 'DESC',
+            ));
+            if ($latest_channels->have_posts()) :
+            ?>
+            <div class="sidebar-widget">
+                <h3 class="sidebar-widget-title">Ultimos Canales</h3>
+                <ul class="sidebar-room-list">
+                    <?php while ($latest_channels->have_posts()) : $latest_channels->the_post(); ?>
+                    <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
+                    <?php endwhile; wp_reset_postdata(); ?>
+                </ul>
+            </div>
+            <?php endif; ?>
+
+            <!-- CATEGORIES -->
+            <?php
+            $room_categories = get_terms(array(
+                'taxonomy'   => 'room_category',
+                'hide_empty' => false,
+            ));
+            if (!is_wp_error($room_categories) && !empty($room_categories)) :
+            ?>
+            <div class="sidebar-widget">
+                <h3 class="sidebar-widget-title">Categorias</h3>
+                <ul class="sidebar-room-list">
+                    <?php foreach ($room_categories as $cat) : ?>
+                    <li><a href="<?php echo esc_url(get_term_link($cat)); ?>"><?php echo esc_html($cat->name); ?> <span class="sidebar-count">(<?php echo $cat->count; ?>)</span></a></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <?php endif; ?>
+
+            <?php endif; ?>
+        </aside>
+    </div>
 
     <?php endwhile; endif; ?>
 </div>
