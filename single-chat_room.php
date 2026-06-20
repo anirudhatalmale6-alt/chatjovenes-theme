@@ -29,11 +29,14 @@
                     </div>
                 <?php endif; ?>
                 <div class="chat-room-info">
-                    <?php if ($hide_title !== '1') : ?>
+                    <?php if ($hide_title != '1') : ?>
                         <h1>Chat <?php the_title(); ?></h1>
                     <?php endif; ?>
-                    <?php if (has_excerpt()) : ?>
-                        <p style="color: var(--text-light); font-size: 15px; line-height: 1.6; margin-top: 8px;"><?php echo esc_html(get_the_excerpt()); ?></p>
+                    <?php
+                    $room_excerpt = get_the_excerpt();
+                    if ($room_excerpt && trim($room_excerpt) !== '') :
+                    ?>
+                        <p style="color: var(--text-light); font-size: 15px; line-height: 1.6; margin-top: 8px;"><?php echo esc_html($room_excerpt); ?></p>
                     <?php endif; ?>
                     <?php if ($users) : ?>
                         <div class="post-meta" style="margin-top: 6px;">
