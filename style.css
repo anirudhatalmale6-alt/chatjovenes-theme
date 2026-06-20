@@ -593,7 +593,7 @@ body.dark-mode .related-room-link {
 
 .chat-embed-wrapper iframe {
     width: 100%;
-    height: 500px;
+    height: 700px;
     border: none;
     overflow: hidden;
 }
@@ -1253,7 +1253,7 @@ body.dark-mode .chat-breadcrumb .current {
     }
 
     .chat-embed-wrapper iframe {
-        height: 400px;
+        height: 600px;
     }
 }
 
@@ -1285,7 +1285,7 @@ body.dark-mode .chat-breadcrumb .current {
     }
 
     .chat-embed-wrapper iframe {
-        height: 350px;
+        height: 550px;
     }
 }
 
