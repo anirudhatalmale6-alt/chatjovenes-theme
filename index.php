@@ -101,6 +101,7 @@
                         <div class="category-card-body">
                             <h3 class="category-card-title"><?php echo esc_html($cat->name); ?></h3>
                             <p class="category-card-count"><?php echo $cat->count; ?> salas</p>
+                            <span class="room-card-btn" style="margin-top: 10px;">Entrar</span>
                         </div>
                     </a>
                     <?php endforeach; ?>
