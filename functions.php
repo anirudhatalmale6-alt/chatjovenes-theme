@@ -256,6 +256,18 @@ function chatjovenes_customizer($wp_customize) {
         'type'    => 'checkbox',
     ));
 
+    // Xat Embed Code
+    $wp_customize->add_setting('xat_embed_code', array(
+        'default'           => '',
+        'sanitize_callback' => 'chatjovenes_sanitize_embed',
+    ));
+    $wp_customize->add_control('xat_embed_code', array(
+        'label'       => 'Codigo Embed de xat',
+        'description' => 'Pega aqui el codigo embed completo de tu chat xat.com (tiene prioridad sobre el ID de grupo)',
+        'section'     => 'chatjovenes_xat',
+        'type'        => 'textarea',
+    ));
+
     // Colors
     $wp_customize->add_setting('primary_color', array(
         'default'           => '#2563eb',
@@ -274,6 +286,69 @@ function chatjovenes_customizer($wp_customize) {
         'label'   => 'Color de Acento',
         'section' => 'colors',
     )));
+
+    $wp_customize->add_setting('bg_color', array(
+        'default'           => '#ffffff',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'bg_color', array(
+        'label'   => 'Color de Fondo',
+        'section' => 'colors',
+    )));
+
+    $wp_customize->add_setting('text_color', array(
+        'default'           => '#1e293b',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'text_color', array(
+        'label'   => 'Color del Texto',
+        'section' => 'colors',
+    )));
+
+    $wp_customize->add_setting('card_bg_color', array(
+        'default'           => '#ffffff',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'card_bg_color', array(
+        'label'   => 'Color de Fondo de Tarjetas',
+        'section' => 'colors',
+    )));
+
+    $wp_customize->add_setting('footer_bg_color', array(
+        'default'           => '#0f172a',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'footer_bg_color', array(
+        'label'   => 'Color de Fondo del Footer',
+        'section' => 'colors',
+    )));
+
+    // Dark Mode
+    $wp_customize->add_section('chatjovenes_darkmode', array(
+        'title'    => 'Modo Oscuro',
+        'priority' => 32,
+    ));
+
+    $wp_customize->add_setting('enable_dark_toggle', array(
+        'default'           => true,
+        'sanitize_callback' => 'wp_validate_boolean',
+    ));
+    $wp_customize->add_control('enable_dark_toggle', array(
+        'label'       => 'Mostrar boton de Modo Oscuro',
+        'description' => 'Los usuarios podran cambiar entre modo claro y oscuro',
+        'section'     => 'chatjovenes_darkmode',
+        'type'        => 'checkbox',
+    ));
+
+    $wp_customize->add_setting('default_dark_mode', array(
+        'default'           => false,
+        'sanitize_callback' => 'wp_validate_boolean',
+    ));
+    $wp_customize->add_control('default_dark_mode', array(
+        'label'   => 'Activar modo oscuro por defecto',
+        'section' => 'chatjovenes_darkmode',
+        'type'    => 'checkbox',
+    ));
 
     // Social Media
     $wp_customize->add_section('chatjovenes_social', array(
@@ -312,15 +387,95 @@ function chatjovenes_customizer($wp_customize) {
 }
 add_action('customize_register', 'chatjovenes_customizer');
 
+// Sanitize embed code
+function chatjovenes_sanitize_embed($input) {
+    return wp_kses($input, array(
+        'iframe' => array('src' => true, 'width' => true, 'height' => true, 'allowfullscreen' => true, 'style' => true, 'frameborder' => true),
+        'embed'  => array('src' => true, 'width' => true, 'height' => true, 'type' => true),
+        'object' => array('data' => true, 'width' => true, 'height' => true, 'type' => true),
+        'param'  => array('name' => true, 'value' => true),
+        'script' => array('src' => true, 'type' => true),
+        'div'    => array('id' => true, 'class' => true, 'style' => true),
+    ));
+}
+
 // Dynamic CSS from customizer
 function chatjovenes_dynamic_css() {
     $primary = get_theme_mod('primary_color', '#2563eb');
     $accent = get_theme_mod('accent_color', '#f97316');
+    $bg = get_theme_mod('bg_color', '#ffffff');
+    $text = get_theme_mod('text_color', '#1e293b');
+    $card_bg = get_theme_mod('card_bg_color', '#ffffff');
+    $footer_bg = get_theme_mod('footer_bg_color', '#0f172a');
     ?>
     <style>
         :root {
             --primary: <?php echo esc_attr($primary); ?>;
             --accent: <?php echo esc_attr($accent); ?>;
+            --bg: <?php echo esc_attr($bg); ?>;
+            --text: <?php echo esc_attr($text); ?>;
+            --bg-light: <?php echo esc_attr($bg); ?>;
+            --card-bg: <?php echo esc_attr($card_bg); ?>;
+        }
+        body { background-color: var(--bg); color: var(--text); }
+        .room-card, .news-card, .category-card, .sidebar .widget { background: var(--card-bg); }
+        .site-header { background: var(--bg); }
+        .site-footer { background: <?php echo esc_attr($footer_bg); ?>; }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            --bg: #121212;
+            --bg-light: #1a1a2e;
+            --bg-section: #1e1e30;
+            --text: #e2e8f0;
+            --text-light: #a0aec0;
+            --text-muted: #718096;
+            --border: #2d3748;
+            --card-bg: #1e293b;
+        }
+        body.dark-mode .site-header { background: #0f172a; border-color: #1e293b; }
+        body.dark-mode .main-nav a { color: #e2e8f0; }
+        body.dark-mode .main-nav a:hover { background: #1e293b; }
+        body.dark-mode .site-logo { color: #e2e8f0; }
+        body.dark-mode .room-card, body.dark-mode .news-card, body.dark-mode .category-card { background: #1e293b; }
+        body.dark-mode .room-card-title, body.dark-mode .news-card-title, body.dark-mode .category-card-title { color: #e2e8f0; }
+        body.dark-mode .room-card-title a, body.dark-mode .news-card-title a, body.dark-mode .category-card-title a { color: #e2e8f0; }
+        body.dark-mode .categories-section { background: #0f172a; }
+        body.dark-mode .channels-section { background: #0f172a; }
+        body.dark-mode .channels-column h3 { color: #e2e8f0; }
+        body.dark-mode .channels-list a { color: #cbd5e1; }
+        body.dark-mode .channels-list li { border-color: #2d3748; }
+        body.dark-mode .channel-badge { background: #2d3748; color: #a0aec0; }
+        body.dark-mode .section-title { color: #e2e8f0; }
+        body.dark-mode .connect-form input[type="text"] { background: rgba(255,255,255,0.1); color: #fff; }
+        body.dark-mode .sidebar .widget { background: #1e293b; }
+        body.dark-mode .sidebar .widget-title { color: #e2e8f0; }
+
+        /* Dark mode toggle button */
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 22px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: #f59e0b;
         }
     </style>
     <?php

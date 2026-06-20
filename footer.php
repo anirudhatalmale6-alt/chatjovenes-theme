@@ -89,6 +89,28 @@
     </div>
 </footer>
 
+<?php if (get_theme_mod('enable_dark_toggle', true)) : ?>
+<button class="dark-mode-toggle" id="darkModeToggle" aria-label="Cambiar modo oscuro" title="Modo Oscuro / Claro">&#9790;</button>
+<script>
+(function(){
+    var btn = document.getElementById('darkModeToggle');
+    var body = document.body;
+    var defaultDark = <?php echo get_theme_mod('default_dark_mode', false) ? 'true' : 'false'; ?>;
+    var saved = localStorage.getItem('chatjovenes_dark');
+    if (saved === 'true' || (saved === null && defaultDark)) {
+        body.classList.add('dark-mode');
+        btn.innerHTML = '&#9788;';
+    }
+    btn.addEventListener('click', function(){
+        body.classList.toggle('dark-mode');
+        var isDark = body.classList.contains('dark-mode');
+        localStorage.setItem('chatjovenes_dark', isDark);
+        btn.innerHTML = isDark ? '&#9788;' : '&#9790;';
+    });
+})();
+</script>
+<?php endif; ?>
+
 <?php wp_footer(); ?>
 </body>
 </html>

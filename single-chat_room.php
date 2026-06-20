@@ -25,7 +25,14 @@
 
     <?php if ($xat_id) : ?>
     <div class="chat-embed-wrapper" style="margin-bottom: 30px;">
-        <iframe src="https://xat.com/web_gear/chat/go_large.php?id=<?php echo esc_attr($xat_id); ?>" allowfullscreen></iframe>
+        <?php
+        $global_embed = get_theme_mod('xat_embed_code', '');
+        if ($global_embed) :
+            echo $global_embed;
+        else :
+        ?>
+            <iframe src="https://xat.com/web_gear/chat/go_large.php?id=<?php echo esc_attr($xat_id); ?>" allowfullscreen></iframe>
+        <?php endif; ?>
     </div>
     <?php endif; ?>
 

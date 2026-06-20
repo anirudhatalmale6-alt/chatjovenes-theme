@@ -110,16 +110,21 @@
 
         <!-- XAT CHAT EMBED -->
         <?php
+        $xat_embed = get_theme_mod('xat_embed_code', '');
         $xat_id = get_theme_mod('xat_group_id', '');
         $show_chat = get_theme_mod('xat_show_homepage', true);
-        if ($xat_id && $show_chat) :
+        if (($xat_embed || $xat_id) && $show_chat) :
         ?>
         <section class="chat-embed-section">
             <div class="container">
                 <h2 class="section-title">Chat en Vivo</h2>
                 <p class="section-subtitle">Unete a la conversacion ahora mismo</p>
                 <div class="chat-embed-wrapper">
-                    <iframe src="https://xat.com/web_gear/chat/go_large.php?id=<?php echo esc_attr($xat_id); ?>" allowfullscreen></iframe>
+                    <?php if ($xat_embed) : ?>
+                        <?php echo $xat_embed; ?>
+                    <?php else : ?>
+                        <iframe src="https://xat.com/web_gear/chat/go_large.php?id=<?php echo esc_attr($xat_id); ?>" allowfullscreen></iframe>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>
