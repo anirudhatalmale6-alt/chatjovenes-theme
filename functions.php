@@ -376,6 +376,43 @@ function chatjovenes_customizer($wp_customize) {
         'type'        => 'textarea',
     ));
 
+    // Header Buttons
+    $wp_customize->add_section('chatjovenes_header_buttons', array(
+        'title'    => 'Botones del Header',
+        'priority' => 33,
+    ));
+
+    $wp_customize->add_setting('chat_url', array(
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control('chat_url', array(
+        'label'       => 'URL Entrar al Chat',
+        'description' => 'Enlace del boton Entrar al Chat',
+        'section'     => 'chatjovenes_header_buttons',
+        'type'        => 'url',
+    ));
+
+    $wp_customize->add_setting('facebook_group_url', array(
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control('facebook_group_url', array(
+        'label'   => 'URL Grupo Facebook',
+        'section' => 'chatjovenes_header_buttons',
+        'type'    => 'url',
+    ));
+
+    $wp_customize->add_setting('whatsapp_group_url', array(
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control('whatsapp_group_url', array(
+        'label'   => 'URL Grupo WhatsApp',
+        'section' => 'chatjovenes_header_buttons',
+        'type'    => 'url',
+    ));
+
     // Radio Button
     $wp_customize->add_section('chatjovenes_radio', array(
         'title'    => 'Boton Radio',
