@@ -116,13 +116,14 @@ img {
 
 /* Header Action Buttons */
 .header-btn {
-    display: inline-block;
-    padding: 8px 16px;
+    display: block;
+    padding: 10px 16px;
     color: #fff !important;
     border-radius: var(--radius);
     font-size: 13px;
     font-weight: 600;
     transition: opacity 0.2s, transform 0.1s;
+    margin: 0 5px;
 }
 
 .header-btn:hover {
@@ -180,7 +181,14 @@ img {
 .main-nav ul {
     display: flex;
     list-style: none;
-    gap: 10px;
+    gap: 0;
+    justify-content: center;
+    flex: 1;
+}
+
+.main-nav ul li {
+    flex: 1;
+    text-align: center;
 }
 
 .main-nav li {
