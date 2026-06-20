@@ -29,7 +29,7 @@
                     </div>
                 <?php endif; ?>
                 <div class="chat-room-info">
-                    <?php if ($hide_title != '1') : ?>
+                    <?php if (!$hide_title || $hide_title === '0' || $hide_title === '') : ?>
                         <h1>Chat <?php the_title(); ?></h1>
                     <?php endif; ?>
                     <?php
