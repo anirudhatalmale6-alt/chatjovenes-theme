@@ -132,15 +132,15 @@ img {
 }
 
 .header-btn-chat {
-    background: var(--primary);
+    background: #e74c3c;
 }
 
 .header-btn-facebook {
-    background: #1877F2;
+    background: #4267B2;
 }
 
 .header-btn-whatsapp {
-    background: #25D366;
+    background: #128C7E;
 }
 
 /* Radio Button */
