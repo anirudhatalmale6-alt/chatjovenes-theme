@@ -65,7 +65,7 @@
                 $cat_ids = wp_list_pluck($room_cats, 'term_id');
                 $related = new WP_Query(array(
                     'post_type'      => 'chat_room',
-                    'posts_per_page' => 4,
+                    'posts_per_page' => 12,
                     'post__not_in'   => array(get_the_ID()),
                     'tax_query'      => array(
                         array(
@@ -77,25 +77,11 @@
                 ));
                 if ($related->have_posts()) :
             ?>
-            <section style="margin-top: 40px;">
-                <h2 class="section-title">Salas Relacionadas</h2>
-                <div class="rooms-grid" style="grid-template-columns: repeat(2, 1fr);">
+            <section class="related-rooms-section">
+                <h2 class="section-title" style="font-size: 20px;">Salas Relacionadas:</h2>
+                <div class="related-rooms-links">
                     <?php while ($related->have_posts()) : $related->the_post(); ?>
-                    <article class="room-card">
-                        <?php if (has_post_thumbnail()) : ?>
-                            <a href="<?php the_permalink(); ?>">
-                                <?php the_post_thumbnail('room-thumbnail', array('class' => 'room-card-image')); ?>
-                            </a>
-                        <?php else : ?>
-                            <a href="<?php the_permalink(); ?>">
-                                <div class="room-card-image" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; font-weight: 700;"><?php echo esc_html(mb_substr(get_the_title(), 0, 2)); ?></div>
-                            </a>
-                        <?php endif; ?>
-                        <div class="room-card-body">
-                            <h3 class="room-card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-                            <a href="<?php the_permalink(); ?>" class="room-card-btn" style="margin-top: 12px;">Entrar</a>
-                        </div>
-                    </article>
+                        <a href="<?php the_permalink(); ?>" class="related-room-link"><?php the_title(); ?></a>
                     <?php endwhile; wp_reset_postdata(); ?>
                 </div>
             </section>

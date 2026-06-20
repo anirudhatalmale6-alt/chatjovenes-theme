@@ -507,6 +507,47 @@ body.dark-mode .room-link:hover {
     background: #1e293b;
 }
 
+/* ===== RELATED ROOMS LINKS (single room page) ===== */
+.related-rooms-section {
+    margin-top: 40px;
+    padding: 24px;
+    background: var(--bg-section);
+    border-radius: var(--radius-lg);
+}
+
+.related-rooms-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px 20px;
+}
+
+.related-room-link {
+    display: block;
+    padding: 8px 4px;
+    color: var(--primary);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.related-room-link::before {
+    content: "\2733 ";
+    font-size: 12px;
+    margin-right: 4px;
+}
+
+.related-room-link:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+body.dark-mode .related-rooms-section {
+    background: #1e293b;
+}
+
+body.dark-mode .related-room-link {
+    color: #60a5fa;
+}
+
 /* ===== XAT CHAT EMBED SECTION ===== */
 .chat-embed-section {
     padding: 50px 0;
@@ -1061,6 +1102,10 @@ body.dark-mode .chat-breadcrumb .current {
     }
 
     .all-rooms-links {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .related-rooms-links {
         grid-template-columns: repeat(2, 1fr);
     }
 
