@@ -26,13 +26,14 @@
             <?php endif; ?>
         </a>
 
-        <button class="menu-toggle" aria-label="Menu" onclick="document.querySelector('.main-nav').classList.toggle('active')">
+        <button class="menu-toggle" aria-label="Menu" id="menuToggle">
             <span></span>
             <span></span>
             <span></span>
         </button>
+        <script>document.getElementById('menuToggle').addEventListener('click',function(){document.getElementById('mainNav').classList.toggle('active');});</script>
 
-        <nav class="main-nav">
+        <nav class="main-nav" id="mainNav">
             <?php
             wp_nav_menu(array(
                 'theme_location' => 'primary',
