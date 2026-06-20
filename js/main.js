@@ -18,15 +18,24 @@
         });
     }
 
-    // Sticky header shadow on scroll
+    // Hide header on scroll down, show on scroll up
     var header = document.querySelector('.site-header');
     if (header) {
+        var lastScroll = 0;
         window.addEventListener('scroll', function() {
-            if (window.scrollY > 10) {
+            var currentScroll = window.scrollY;
+            if (currentScroll > 80) {
+                if (currentScroll > lastScroll) {
+                    header.classList.add('header-hidden');
+                } else {
+                    header.classList.remove('header-hidden');
+                }
                 header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.08)';
             } else {
+                header.classList.remove('header-hidden');
                 header.style.boxShadow = 'none';
             }
+            lastScroll = currentScroll;
         });
     }
 
