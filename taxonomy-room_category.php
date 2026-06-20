@@ -17,16 +17,16 @@
         </nav>
 
         <!-- CATEGORY HEADER -->
-        <div class="category-header">
+        <div class="category-header" style="display: flex; flex-direction: row; align-items: flex-start; gap: 24px; padding: 30px; background: var(--bg-section); border-radius: 12px; margin-bottom: 20px;">
             <?php if ($cat_image) : ?>
-                <div class="category-header-image">
-                    <img src="<?php echo esc_url($cat_image); ?>" alt="<?php single_term_title(); ?>">
+                <div class="category-header-image" style="flex: 0 0 120px; width: 120px; height: 120px; border-radius: 8px; overflow: hidden;">
+                    <img src="<?php echo esc_url($cat_image); ?>" alt="<?php single_term_title(); ?>" style="width: 120px; height: 120px; object-fit: cover; display: block;">
                 </div>
             <?php endif; ?>
-            <div class="category-header-info">
-                <h1>Chats en la categoria <?php single_term_title(); ?></h1>
+            <div class="category-header-info" style="flex: 1;">
+                <h1 style="font-size: 26px; margin-bottom: 8px;">Chats en la categoria <?php single_term_title(); ?></h1>
                 <?php if (term_description()) : ?>
-                    <p><?php echo term_description(); ?></p>
+                    <div style="color: var(--text-light); font-size: 15px; line-height: 1.6;"><?php echo term_description(); ?></div>
                 <?php endif; ?>
             </div>
         </div>
