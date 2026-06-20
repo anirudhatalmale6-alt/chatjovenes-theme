@@ -1,4 +1,5 @@
-<!-- ABOUT TEXT ABOVE FOOTER -->
+<!-- ABOUT TEXT ABOVE FOOTER (only on homepage) -->
+<?php if (is_front_page()) : ?>
 <section class="footer-about">
     <div class="container">
         <p>ChatJovenes es una comunidad de chat en español totalmente gratis, formada por usuarios de todas partes de España, Mexico, Argentina, Chile y toda Latinoamerica en busca de nuevas amistades.</p>
@@ -7,6 +8,7 @@
         <p>En resumen, ChatJovenes te ofrece un chat gratis para ti y para tus amigos, para que podais chatear de forma facil desde nuestra web, o incluir ese chat en la vuestra propia, para chatear en la red que mas ha crecido en los ultimos años, con el mejor ambiente, y la mejor gente.</p>
     </div>
 </section>
+<?php endif; ?>
 
 <footer class="site-footer">
     <div class="container">
