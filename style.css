@@ -947,11 +947,13 @@ body.dark-mode .chat-breadcrumb .current {
     }
 
     .rooms-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 
     .categories-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 
     .channels-columns {
@@ -959,7 +961,8 @@ body.dark-mode .chat-breadcrumb .current {
     }
 
     .news-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 
     .content-with-sidebar {
@@ -994,7 +997,21 @@ body.dark-mode .chat-breadcrumb .current {
     }
 
     .categories-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .rooms-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .room-card-image {
+        height: 120px;
+    }
+
+    .room-card-body {
+        padding: 12px;
+        min-height: 120px;
     }
 
     .chat-embed-wrapper iframe {
