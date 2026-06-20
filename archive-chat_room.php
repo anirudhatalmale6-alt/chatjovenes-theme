@@ -2,24 +2,56 @@
 
 <section class="rooms-section">
     <div class="container">
-        <h1 class="section-title">
-            <?php
-            if (is_tax('room_category')) {
-                single_term_title();
-            } else {
-                echo 'Todas las Salas de Chat';
-            }
-            ?>
-        </h1>
-        <p class="section-subtitle">
-            <?php
-            if (is_tax('room_category')) {
-                echo term_description();
-            } else {
-                echo 'Explora todas nuestras salas disponibles';
-            }
-            ?>
-        </p>
+
+        <?php if (is_tax('room_category')) :
+            $current_term = get_queried_object();
+            $cat_image = get_term_meta($current_term->term_id, 'category_image', true);
+            $cat_embed = get_term_meta($current_term->term_id, 'category_chat_embed', true);
+        ?>
+
+        <!-- BREADCRUMB -->
+        <nav class="chat-breadcrumb">
+            <a href="<?php echo esc_url(home_url('/')); ?>">Inicio</a>
+            <span>/</span>
+            <span class="current"><?php single_term_title(); ?></span>
+        </nav>
+
+        <!-- CATEGORY HEADER -->
+        <div class="category-header">
+            <?php if ($cat_image) : ?>
+                <div class="category-header-image">
+                    <img src="<?php echo esc_url($cat_image); ?>" alt="<?php single_term_title(); ?>">
+                </div>
+            <?php endif; ?>
+            <div class="category-header-info">
+                <h1>Chats en la categoria <?php single_term_title(); ?></h1>
+                <?php if (term_description()) : ?>
+                    <p><?php echo term_description(); ?></p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- CATEGORY CHAT EMBED -->
+        <?php
+        $embed_code = $cat_embed ? $cat_embed : get_theme_mod('xat_embed_code', '');
+        if ($embed_code) :
+        ?>
+        <div class="category-chat-box">
+            <div class="category-chat-label">
+                <span><?php single_term_title(); ?></span>
+            </div>
+            <div class="chat-embed-wrapper">
+                <?php echo $embed_code; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <?php else : ?>
+
+        <h1 class="section-title">Todas las Salas de Chat</h1>
+        <p class="section-subtitle">Explora todas nuestras salas disponibles</p>
+
+        <?php endif; ?>
 
         <!-- FEATURED ROOMS WITH IMAGES (4 columns) -->
         <?php
@@ -35,7 +67,6 @@
         );
 
         if (is_tax('room_category')) {
-            $current_term = get_queried_object();
             $featured_args['tax_query'] = array(
                 array(
                     'taxonomy' => 'room_category',
@@ -54,7 +85,7 @@
 
         if ($featured->have_posts()) :
         ?>
-        <h2 class="section-title" style="font-size: 20px; margin-bottom: 20px;">Salas de Chat Recomendadas</h2>
+        <h2 class="section-title" style="font-size: 20px; margin-top: 40px; margin-bottom: 20px;">Salas de Chat Recomendadas</h2>
         <div class="rooms-grid">
             <?php while ($featured->have_posts()) : $featured->the_post();
                 $users = get_post_meta(get_the_ID(), '_users_online', true);
@@ -96,7 +127,6 @@
         );
 
         if (is_tax('room_category')) {
-            $current_term = get_queried_object();
             $all_args['tax_query'] = array(
                 array(
                     'taxonomy' => 'room_category',

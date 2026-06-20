@@ -200,12 +200,18 @@ function chatjovenes_category_add_image($taxonomy) {
         <p class="description">URL de la imagen para esta categoria (o usa el boton de medios)</p>
         <button type="button" class="button chatjovenes-upload-btn" data-target="category_image">Subir Imagen</button>
     </div>
+    <div class="form-field">
+        <label for="category_chat_embed">Embed del Chat (iframe)</label>
+        <textarea name="category_chat_embed" id="category_chat_embed" rows="3"></textarea>
+        <p class="description">Pega aqui el codigo iframe del chat para esta categoria</p>
+    </div>
     <?php
 }
 add_action('room_category_add_form_fields', 'chatjovenes_category_add_image');
 
 function chatjovenes_category_edit_image($term) {
     $image = get_term_meta($term->term_id, 'category_image', true);
+    $chat_embed = get_term_meta($term->term_id, 'category_chat_embed', true);
     ?>
     <tr class="form-field">
         <th scope="row"><label for="category_image">Imagen de Categoria</label></th>
@@ -218,6 +224,13 @@ function chatjovenes_category_edit_image($term) {
             <?php endif; ?>
         </td>
     </tr>
+    <tr class="form-field">
+        <th scope="row"><label for="category_chat_embed">Embed del Chat (iframe)</label></th>
+        <td>
+            <textarea name="category_chat_embed" id="category_chat_embed" rows="4" class="large-text code"><?php echo esc_textarea($chat_embed); ?></textarea>
+            <p class="description">Pega aqui el codigo iframe del chat para esta categoria</p>
+        </td>
+    </tr>
     <?php
 }
 add_action('room_category_edit_form_fields', 'chatjovenes_category_edit_image');
@@ -225,6 +238,9 @@ add_action('room_category_edit_form_fields', 'chatjovenes_category_edit_image');
 function chatjovenes_save_category_image($term_id) {
     if (isset($_POST['category_image'])) {
         update_term_meta($term_id, 'category_image', esc_url_raw($_POST['category_image']));
+    }
+    if (isset($_POST['category_chat_embed'])) {
+        update_term_meta($term_id, 'category_chat_embed', chatjovenes_sanitize_embed($_POST['category_chat_embed']));
     }
 }
 add_action('created_room_category', 'chatjovenes_save_category_image');
