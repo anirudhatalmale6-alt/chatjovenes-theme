@@ -26,7 +26,7 @@
             <?php endif; ?>
         </a>
 
-        <button class="menu-toggle" aria-label="Menu" id="menuToggle">
+        <button class="menu-toggle" aria-label="Menu" id="menuToggle" onclick="document.getElementById('mainNav').classList.toggle('active')">
             <span></span>
             <span></span>
             <span></span>
