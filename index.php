@@ -80,6 +80,7 @@
         $categories = get_terms(array(
             'taxonomy'   => 'room_category',
             'hide_empty' => false,
+            'parent'     => 0,
         ));
         if (!is_wp_error($categories) && !empty($categories)) :
         ?>
