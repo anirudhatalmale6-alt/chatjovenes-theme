@@ -126,11 +126,23 @@
         ));
         if (!is_wp_error($subcats) && !empty($subcats)) :
         ?>
-        <div class="all-rooms-section" style="margin-top: 40px;">
+        <div style="margin-top: 40px;">
             <h2 class="section-title" style="font-size: 20px; margin-bottom: 20px;">Sub categorias de <?php single_term_title(); ?></h2>
-            <div class="all-rooms-links">
-                <?php foreach ($subcats as $subcat) : ?>
-                    <a href="<?php echo esc_url(get_term_link($subcat)); ?>" class="room-link"><?php echo esc_html($subcat->name); ?></a>
+            <div class="categories-grid">
+                <?php foreach ($subcats as $subcat) :
+                    $subcat_image = get_term_meta($subcat->term_id, 'category_image', true);
+                ?>
+                <a href="<?php echo esc_url(get_term_link($subcat)); ?>" class="category-card">
+                    <?php if ($subcat_image) : ?>
+                        <img src="<?php echo esc_url($subcat_image); ?>" alt="<?php echo esc_attr($subcat->name); ?>" class="category-card-image">
+                    <?php else : ?>
+                        <div class="category-card-image" style="background: linear-gradient(135deg, var(--primary-light), var(--primary)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 28px; font-weight: 700;"><?php echo esc_html(mb_substr($subcat->name, 0, 2)); ?></div>
+                    <?php endif; ?>
+                    <div class="category-card-body">
+                        <h3 class="category-card-title"><?php echo esc_html($subcat->name); ?></h3>
+                        <p class="category-card-count"><?php echo $subcat->count; ?> salas</p>
+                    </div>
+                </a>
                 <?php endforeach; ?>
             </div>
         </div>
