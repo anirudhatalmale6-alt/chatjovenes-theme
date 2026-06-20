@@ -593,7 +593,7 @@ body.dark-mode .related-room-link {
 
 .chat-embed-wrapper iframe {
     width: 100%;
-    height: 700px;
+    height: 900px;
     border: none;
     overflow: hidden;
 }
