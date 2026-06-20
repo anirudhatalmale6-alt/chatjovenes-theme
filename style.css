@@ -1183,6 +1183,10 @@ body.dark-mode .chat-breadcrumb .current {
         align-items: flex-start;
     }
 
+    .chat-room-thumb {
+        display: none;
+    }
+
     .category-header {
         flex-direction: column;
         padding: 0;
