@@ -114,6 +114,29 @@ img {
     color: var(--primary);
 }
 
+/* Radio Button */
+.radio-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background: var(--accent);
+    color: #fff !important;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: background 0.2s, transform 0.1s;
+    white-space: nowrap;
+    margin-left: 12px;
+}
+
+.radio-btn:hover {
+    background: var(--accent-dark);
+    transform: translateY(-1px);
+    color: #fff !important;
+}
+
 /* Navigation */
 .main-nav {
     display: flex;

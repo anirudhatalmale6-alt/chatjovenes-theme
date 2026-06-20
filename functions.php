@@ -376,6 +376,33 @@ function chatjovenes_customizer($wp_customize) {
         'type'        => 'textarea',
     ));
 
+    // Radio Button
+    $wp_customize->add_section('chatjovenes_radio', array(
+        'title'    => 'Boton Radio',
+        'priority' => 36,
+    ));
+
+    $wp_customize->add_setting('radio_url', array(
+        'default'           => 'https://holaxat.com/radio/player',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control('radio_url', array(
+        'label'       => 'URL de la Radio',
+        'description' => 'Enlace que se abre en la ventana popup',
+        'section'     => 'chatjovenes_radio',
+        'type'        => 'url',
+    ));
+
+    $wp_customize->add_setting('radio_button_text', array(
+        'default'           => 'Escuchar La Radio',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('radio_button_text', array(
+        'label'   => 'Texto del Boton',
+        'section' => 'chatjovenes_radio',
+        'type'    => 'text',
+    ));
+
     // Colors
     $wp_customize->add_setting('primary_color', array(
         'default'           => '#2563eb',

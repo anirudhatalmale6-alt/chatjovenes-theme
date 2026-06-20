@@ -41,6 +41,16 @@
             ));
             ?>
         </nav>
+
+        <?php
+        $radio_url = get_theme_mod('radio_url', 'https://holaxat.com/radio/player');
+        $radio_text = get_theme_mod('radio_button_text', 'Escuchar La Radio');
+        if ($radio_url) :
+        ?>
+        <a href="<?php echo esc_url($radio_url); ?>" class="radio-btn" onclick="window.open(this.href, 'radio', 'width=400,height=600,scrollbars=no,resizable=yes'); return false;">
+            <?php echo esc_html($radio_text); ?>
+        </a>
+        <?php endif; ?>
     </div>
 </header>
 <script>
