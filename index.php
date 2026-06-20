@@ -3,15 +3,24 @@
 <main>
     <?php if (is_front_page()) : ?>
 
-        <!-- HERO SECTION -->
-        <section class="hero-section">
+        <!-- HERO SECTION WITH CHAT EMBED -->
+        <?php
+        $hero_embed = get_theme_mod('xat_embed_code', '');
+        $hero_xat_id = get_theme_mod('xat_group_id', '');
+        ?>
+        <section class="hero-chat-section">
             <div class="container">
-                <h1><?php echo esc_html(get_theme_mod('hero_title', 'Bienvenido a ' . get_bloginfo('name'))); ?></h1>
-                <p><?php echo esc_html(get_theme_mod('hero_subtitle', 'Conecta con personas de todo el mundo hispano')); ?></p>
-                <form class="connect-form" action="<?php echo esc_url(home_url('/')); ?>" method="get">
-                    <input type="text" name="nickname" placeholder="Escribe tu nick..." required>
-                    <button type="submit" class="btn-connect"><?php echo esc_html(get_theme_mod('hero_button_text', 'Conectar')); ?></button>
-                </form>
+                <h2 class="section-title"><?php echo esc_html(get_theme_mod('hero_title', 'Chat en Vivo')); ?></h2>
+                <p class="section-subtitle"><?php echo esc_html(get_theme_mod('hero_subtitle', 'Unete a la conversacion ahora mismo')); ?></p>
+                <?php if ($hero_embed || $hero_xat_id) : ?>
+                <div class="chat-embed-wrapper">
+                    <?php if ($hero_embed) : ?>
+                        <?php echo $hero_embed; ?>
+                    <?php else : ?>
+                        <iframe src="https://xat.com/web_gear/chat/go_large.php?id=<?php echo esc_attr($hero_xat_id); ?>" allowfullscreen scrolling="no"></iframe>
+                    <?php endif; ?>
+                </div>
+                <?php endif; ?>
             </div>
         </section>
 
@@ -110,27 +119,7 @@
         </section>
         <?php endif; ?>
 
-        <!-- XAT CHAT EMBED -->
-        <?php
-        $xat_embed = get_theme_mod('xat_embed_code', '');
-        $xat_id = get_theme_mod('xat_group_id', '');
-        $show_chat = get_theme_mod('xat_show_homepage', true);
-        if (($xat_embed || $xat_id) && $show_chat) :
-        ?>
-        <section class="chat-embed-section">
-            <div class="container">
-                <h2 class="section-title">Chat en Vivo</h2>
-                <p class="section-subtitle">Unete a la conversacion ahora mismo</p>
-                <div class="chat-embed-wrapper">
-                    <?php if ($xat_embed) : ?>
-                        <?php echo $xat_embed; ?>
-                    <?php else : ?>
-                        <iframe src="https://xat.com/web_gear/chat/go_large.php?id=<?php echo esc_attr($xat_id); ?>" allowfullscreen scrolling="no"></iframe>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </section>
-        <?php endif; ?>
+        <!-- XAT CHAT EMBED section removed - now in hero -->
 
         <!-- TOP & LATEST CHANNELS -->
         <section class="channels-section">

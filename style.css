@@ -223,6 +223,15 @@ img {
     transform: translateY(-1px);
 }
 
+/* ===== HERO CHAT SECTION ===== */
+.hero-chat-section {
+    padding: 40px 0;
+}
+
+.hero-chat-section .chat-embed-wrapper {
+    max-width: 100%;
+}
+
 /* ===== SECTION TITLES ===== */
 .section-title {
     font-size: 26px;
