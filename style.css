@@ -403,6 +403,36 @@ img {
     margin-top: 4px;
 }
 
+/* ===== ALL ROOMS LINK GRID ===== */
+.all-rooms-links {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px 20px;
+}
+
+.room-link {
+    display: block;
+    padding: 10px 14px;
+    color: var(--primary);
+    font-size: 15px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s, color 0.2s;
+}
+
+.room-link:hover {
+    background: var(--bg-section);
+    color: var(--primary-dark);
+}
+
+body.dark-mode .room-link {
+    color: #60a5fa;
+    border-color: #2d3748;
+}
+
+body.dark-mode .room-link:hover {
+    background: #1e293b;
+}
+
 /* ===== XAT CHAT EMBED SECTION ===== */
 .chat-embed-section {
     padding: 50px 0;
@@ -954,6 +984,10 @@ body.dark-mode .chat-breadcrumb .current {
     .categories-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
+    }
+
+    .all-rooms-links {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .channels-columns {

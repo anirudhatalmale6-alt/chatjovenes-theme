@@ -21,9 +21,42 @@
             ?>
         </p>
 
-        <?php if (have_posts()) : ?>
+        <!-- FEATURED ROOMS WITH IMAGES (4 columns) -->
+        <?php
+        $featured_args = array(
+            'post_type'      => 'chat_room',
+            'posts_per_page' => 4,
+            'meta_query'     => array(
+                array(
+                    'key'   => '_featured_room',
+                    'value' => '1',
+                ),
+            ),
+        );
+
+        if (is_tax('room_category')) {
+            $current_term = get_queried_object();
+            $featured_args['tax_query'] = array(
+                array(
+                    'taxonomy' => 'room_category',
+                    'field'    => 'term_id',
+                    'terms'    => $current_term->term_id,
+                ),
+            );
+        }
+
+        $featured = new WP_Query($featured_args);
+
+        if (!$featured->have_posts()) {
+            unset($featured_args['meta_query']);
+            $featured = new WP_Query($featured_args);
+        }
+
+        if ($featured->have_posts()) :
+        ?>
+        <h2 class="section-title" style="font-size: 20px; margin-bottom: 20px;">Salas de Chat Recomendadas</h2>
         <div class="rooms-grid">
-            <?php while (have_posts()) : the_post();
+            <?php while ($featured->have_posts()) : $featured->the_post();
                 $users = get_post_meta(get_the_ID(), '_users_online', true);
             ?>
             <article class="room-card">
@@ -49,20 +82,42 @@
                     <a href="<?php the_permalink(); ?>" class="room-card-btn" style="margin-top: 12px;">Entrar</a>
                 </div>
             </article>
-            <?php endwhile; ?>
+            <?php endwhile; wp_reset_postdata(); ?>
         </div>
+        <?php endif; ?>
 
-        <div class="pagination">
-            <?php
-            the_posts_pagination(array(
-                'mid_size'  => 2,
-                'prev_text' => '&laquo;',
-                'next_text' => '&raquo;',
-            ));
-            ?>
+        <!-- ALL ROOMS AS TEXT LINKS -->
+        <?php
+        $all_args = array(
+            'post_type'      => 'chat_room',
+            'posts_per_page' => -1,
+            'orderby'        => 'title',
+            'order'          => 'ASC',
+        );
+
+        if (is_tax('room_category')) {
+            $current_term = get_queried_object();
+            $all_args['tax_query'] = array(
+                array(
+                    'taxonomy' => 'room_category',
+                    'field'    => 'term_id',
+                    'terms'    => $current_term->term_id,
+                ),
+            );
+        }
+
+        $all_rooms = new WP_Query($all_args);
+
+        if ($all_rooms->have_posts()) :
+        ?>
+        <div class="all-rooms-section" style="margin-top: 40px;">
+            <h2 class="section-title" style="font-size: 20px; margin-bottom: 20px;">Todas las Salas</h2>
+            <div class="all-rooms-links">
+                <?php while ($all_rooms->have_posts()) : $all_rooms->the_post(); ?>
+                    <a href="<?php the_permalink(); ?>" class="room-link"><?php the_title(); ?></a>
+                <?php endwhile; wp_reset_postdata(); ?>
+            </div>
         </div>
-        <?php else : ?>
-            <p>No hay salas de chat disponibles todavia.</p>
         <?php endif; ?>
     </div>
 </section>
