@@ -29,18 +29,14 @@
                 <?php endif; ?>
                 <div class="chat-room-info">
                     <h1><?php the_title(); ?></h1>
-                    <div class="post-meta">
-                        <?php if ($room_cats && !is_wp_error($room_cats)) : ?>
-                            <?php foreach ($room_cats as $i => $rc) : ?>
-                                <?php if ($i > 0) echo ', '; ?>
-                                <a href="<?php echo esc_url(get_term_link($rc)); ?>"><?php echo esc_html($rc->name); ?></a>
-                            <?php endforeach; ?>
-                            &bull;
-                        <?php endif; ?>
-                        <?php if ($users) : ?>
+                    <?php if (has_excerpt()) : ?>
+                        <p style="color: var(--text-light); font-size: 15px; line-height: 1.6; margin-top: 8px;"><?php echo esc_html(get_the_excerpt()); ?></p>
+                    <?php endif; ?>
+                    <?php if ($users) : ?>
+                        <div class="post-meta" style="margin-top: 6px;">
                             <span class="users-online"><?php echo intval($users); ?> usuarios en linea</span>
-                        <?php endif; ?>
-                    </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
 
