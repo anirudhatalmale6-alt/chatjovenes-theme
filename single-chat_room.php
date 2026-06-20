@@ -2,7 +2,7 @@
 
 <div class="container" style="padding: 30px 20px;">
     <?php if (have_posts()) : while (have_posts()) : the_post();
-        $xat_id = get_post_meta(get_the_ID(), '_xat_chat_id', true);
+        $xat_embed_room = get_post_meta(get_the_ID(), '_xat_embed_code', true);
         $users = get_post_meta(get_the_ID(), '_users_online', true);
         $room_cats = get_the_terms(get_the_ID(), 'room_category');
     ?>
@@ -46,14 +46,11 @@
 
             <?php
             $global_embed = get_theme_mod('xat_embed_code', '');
-            if ($global_embed || $xat_id) :
+            $room_embed = $xat_embed_room ? $xat_embed_room : $global_embed;
+            if ($room_embed) :
             ?>
             <div class="chat-embed-wrapper" style="margin: 20px 0 30px;">
-                <?php if ($global_embed) : ?>
-                    <?php echo $global_embed; ?>
-                <?php elseif ($xat_id) : ?>
-                    <iframe src="https://xat.com/web_gear/chat/go_large.php?id=<?php echo esc_attr($xat_id); ?>" allowfullscreen scrolling="no"></iframe>
-                <?php endif; ?>
+                <?php echo $room_embed; ?>
             </div>
             <?php endif; ?>
 

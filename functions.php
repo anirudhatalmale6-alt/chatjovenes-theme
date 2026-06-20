@@ -144,16 +144,16 @@ add_action('add_meta_boxes', 'chatjovenes_room_meta_boxes');
 
 function chatjovenes_room_meta_callback($post) {
     wp_nonce_field('chatjovenes_room_meta', 'chatjovenes_room_nonce');
-    $xat_id = get_post_meta($post->ID, '_xat_chat_id', true);
+    $xat_embed = get_post_meta($post->ID, '_xat_embed_code', true);
     $users_online = get_post_meta($post->ID, '_users_online', true);
     $featured = get_post_meta($post->ID, '_featured_room', true);
     ?>
     <table class="form-table">
         <tr>
-            <th><label for="xat_chat_id">ID del Chat xat.com</label></th>
+            <th><label for="xat_embed_code">Embed del Chat (iframe)</label></th>
             <td>
-                <input type="text" id="xat_chat_id" name="xat_chat_id" value="<?php echo esc_attr($xat_id); ?>" class="regular-text">
-                <p class="description">El ID o nombre del grupo de xat.com para esta sala</p>
+                <textarea id="xat_embed_code" name="xat_embed_code" rows="4" class="large-text code"><?php echo esc_textarea($xat_embed); ?></textarea>
+                <p class="description">Pega aqui el codigo iframe de tu chat xat.com. Ejemplo: &lt;iframe src="https://xat.com/embed/chat.php#id=31449413&amp;gn=jovenes019" width="650" height="486" frameborder="0" scrolling="no"&gt;&lt;/iframe&gt;</p>
             </td>
         </tr>
         <tr>
@@ -181,8 +181,8 @@ function chatjovenes_save_room_meta($post_id) {
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
     if (!current_user_can('edit_post', $post_id)) return;
 
-    if (isset($_POST['xat_chat_id'])) {
-        update_post_meta($post_id, '_xat_chat_id', sanitize_text_field($_POST['xat_chat_id']));
+    if (isset($_POST['xat_embed_code'])) {
+        update_post_meta($post_id, '_xat_embed_code', chatjovenes_sanitize_embed($_POST['xat_embed_code']));
     }
     if (isset($_POST['users_online'])) {
         update_post_meta($post_id, '_users_online', intval($_POST['users_online']));
@@ -471,7 +471,7 @@ add_action('customize_register', 'chatjovenes_customizer');
 // Sanitize embed code
 function chatjovenes_sanitize_embed($input) {
     return wp_kses($input, array(
-        'iframe' => array('src' => true, 'width' => true, 'height' => true, 'allowfullscreen' => true, 'style' => true, 'frameborder' => true),
+        'iframe' => array('src' => true, 'width' => true, 'height' => true, 'allowfullscreen' => true, 'style' => true, 'frameborder' => true, 'scrolling' => true, 'allow' => true),
         'embed'  => array('src' => true, 'width' => true, 'height' => true, 'type' => true),
         'object' => array('data' => true, 'width' => true, 'height' => true, 'type' => true),
         'param'  => array('name' => true, 'value' => true),
