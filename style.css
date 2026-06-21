@@ -180,15 +180,15 @@ img {
 .main-nav {
     display: flex;
     align-items: center;
+    margin-left: auto;
 }
 
 .main-nav ul {
     display: flex;
     list-style: none;
     gap: 8px;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
-    flex: 1;
 }
 
 .main-nav ul li {
@@ -549,9 +549,9 @@ img {
 }
 
 .category-header-image {
-    flex: 0 0 150px;
-    width: 150px;
-    height: 140px;
+    flex: 0 0 180px;
+    width: 180px;
+    height: 160px;
     border-radius: var(--radius);
     overflow: hidden;
     border: 3px solid #fff;
@@ -1137,8 +1137,8 @@ body.dark-mode .footer-about {
 
 .chat-room-thumb {
     flex-shrink: 0;
-    width: 150px;
-    height: 120px;
+    width: 180px;
+    height: 140px;
     border-radius: var(--radius);
     overflow: hidden;
     border: 3px solid #fff;

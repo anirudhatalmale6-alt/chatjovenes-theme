@@ -41,8 +41,8 @@ add_action('after_setup_theme', 'chatjovenes_setup');
 
 // Enqueue styles and scripts
 function chatjovenes_enqueue() {
-    wp_enqueue_style('chatjovenes-style', get_stylesheet_uri(), array(), '1.8.1');
-    wp_enqueue_script('chatjovenes-script', get_template_directory_uri() . '/js/main.js', array(), '1.8.1', true);
+    wp_enqueue_style('chatjovenes-style', get_stylesheet_uri(), array(), '1.9.0');
+    wp_enqueue_script('chatjovenes-script', get_template_directory_uri() . '/js/main.js', array(), '1.9.0', true);
 }
 add_action('wp_enqueue_scripts', 'chatjovenes_enqueue');
 
@@ -111,6 +111,19 @@ function chatjovenes_register_cpt() {
         'rewrite'      => array('slug' => 'chat'),
         'supports'     => array('title', 'editor', 'thumbnail', 'excerpt'),
         'menu_icon'    => 'dashicons-format-chat',
+        'show_in_rest' => true,
+    ));
+
+    register_taxonomy('room_tag', 'chat_room', array(
+        'labels' => array(
+            'name'          => 'Etiquetas',
+            'singular_name' => 'Etiqueta',
+            'add_new_item'  => 'Agregar Etiqueta',
+            'search_items'  => 'Buscar Etiquetas',
+        ),
+        'public'       => true,
+        'hierarchical' => false,
+        'rewrite'      => array('slug' => 'chat-tag'),
         'show_in_rest' => true,
     ));
 
