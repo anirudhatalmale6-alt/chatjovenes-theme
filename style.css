@@ -167,7 +167,7 @@ img {
     letter-spacing: 0.5px;
     transition: background 0.2s, transform 0.1s;
     white-space: nowrap;
-    margin-left: 12px;
+    margin-left: 10px;
 }
 
 .radio-btn:hover {
@@ -181,7 +181,7 @@ img {
     display: flex;
     align-items: center;
     margin-left: auto;
-    margin-right: 12px;
+    margin-right: 0;
 }
 
 .main-nav ul {

@@ -41,8 +41,8 @@ add_action('after_setup_theme', 'chatjovenes_setup');
 
 // Enqueue styles and scripts
 function chatjovenes_enqueue() {
-    wp_enqueue_style('chatjovenes-style', get_stylesheet_uri(), array(), '1.9.2');
-    wp_enqueue_script('chatjovenes-script', get_template_directory_uri() . '/js/main.js', array(), '1.9.2', true);
+    wp_enqueue_style('chatjovenes-style', get_stylesheet_uri(), array(), '1.9.3');
+    wp_enqueue_script('chatjovenes-script', get_template_directory_uri() . '/js/main.js', array(), '1.9.3', true);
 }
 add_action('wp_enqueue_scripts', 'chatjovenes_enqueue');
 
