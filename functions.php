@@ -41,8 +41,8 @@ add_action('after_setup_theme', 'chatjovenes_setup');
 
 // Enqueue styles and scripts
 function chatjovenes_enqueue() {
-    wp_enqueue_style('chatjovenes-style', get_stylesheet_uri(), array(), '1.9.3');
-    wp_enqueue_script('chatjovenes-script', get_template_directory_uri() . '/js/main.js', array(), '1.9.3', true);
+    wp_enqueue_style('chatjovenes-style', get_stylesheet_uri(), array(), '1.9.4');
+    wp_enqueue_script('chatjovenes-script', get_template_directory_uri() . '/js/main.js', array(), '1.9.4', true);
 }
 add_action('wp_enqueue_scripts', 'chatjovenes_enqueue');
 
@@ -338,6 +338,36 @@ function chatjovenes_customizer($wp_customize) {
         'label'   => 'Texto del Boton',
         'section' => 'chatjovenes_hero',
         'type'    => 'text',
+    ));
+
+    // Homepage Layout
+    $wp_customize->add_section('chatjovenes_homepage', array(
+        'title'    => 'Pagina de Inicio',
+        'priority' => 31,
+    ));
+
+    $wp_customize->add_setting('homepage_categories_limit', array(
+        'default'           => 8,
+        'sanitize_callback' => 'absint',
+    ));
+    $wp_customize->add_control('homepage_categories_limit', array(
+        'label'       => 'Numero de categorias a mostrar',
+        'description' => 'Limite de categorias en la pagina de inicio (0 = todas)',
+        'section'     => 'chatjovenes_homepage',
+        'type'        => 'number',
+        'input_attrs' => array('min' => 0, 'max' => 50, 'step' => 1),
+    ));
+
+    $wp_customize->add_setting('homepage_rooms_limit', array(
+        'default'           => 8,
+        'sanitize_callback' => 'absint',
+    ));
+    $wp_customize->add_control('homepage_rooms_limit', array(
+        'label'       => 'Numero de salas destacadas a mostrar',
+        'description' => 'Limite de salas recomendadas en la pagina de inicio',
+        'section'     => 'chatjovenes_homepage',
+        'type'        => 'number',
+        'input_attrs' => array('min' => 1, 'max' => 50, 'step' => 1),
     ));
 
     // Header Options

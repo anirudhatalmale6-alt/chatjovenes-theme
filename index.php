@@ -26,9 +26,10 @@
 
         <!-- FEATURED CHAT ROOMS -->
         <?php
+        $rooms_limit = get_theme_mod('homepage_rooms_limit', 8);
         $featured_rooms = new WP_Query(array(
             'post_type'      => 'chat_room',
-            'posts_per_page' => 8,
+            'posts_per_page' => $rooms_limit,
             'meta_query'     => array(
                 array(
                     'key'   => '_featured_room',
@@ -40,7 +41,7 @@
         if (!$featured_rooms->have_posts()) {
             $featured_rooms = new WP_Query(array(
                 'post_type'      => 'chat_room',
-                'posts_per_page' => 8,
+                'posts_per_page' => $rooms_limit,
             ));
         }
 
@@ -89,10 +90,12 @@
 
         <!-- CATEGORIES -->
         <?php
+        $cat_limit = get_theme_mod('homepage_categories_limit', 8);
         $categories = get_terms(array(
             'taxonomy'   => 'room_category',
             'hide_empty' => false,
             'parent'     => 0,
+            'number'     => $cat_limit ? $cat_limit : 0,
         ));
         if (!is_wp_error($categories) && !empty($categories)) :
         ?>
