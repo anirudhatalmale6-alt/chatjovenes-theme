@@ -549,11 +549,13 @@ img {
 }
 
 .category-header-image {
-    flex: 0 0 120px;
-    width: 120px;
-    height: 120px;
+    flex: 0 0 150px;
+    width: 150px;
+    height: 140px;
     border-radius: var(--radius);
     overflow: hidden;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 
 .category-header-image img {
@@ -604,6 +606,11 @@ img {
 
 body.dark-mode .category-header {
     background: #1e293b;
+}
+
+body.dark-mode .category-header-image,
+body.dark-mode .chat-room-thumb {
+    border-color: #334155;
 }
 
 body.dark-mode .category-chat-box {
@@ -1130,10 +1137,12 @@ body.dark-mode .footer-about {
 
 .chat-room-thumb {
     flex-shrink: 0;
-    width: 120px;
-    height: 80px;
+    width: 150px;
+    height: 120px;
     border-radius: var(--radius);
     overflow: hidden;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 
 .chat-room-thumb img {
