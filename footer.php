@@ -137,6 +137,22 @@
     </div>
 </footer>
 
+<button class="scroll-top-btn" id="scrollTopBtn" aria-label="Ir arriba" title="Ir arriba" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#9650;</button>
+<script>
+(function(){
+    var btn = document.getElementById('scrollTopBtn');
+    if (btn) {
+        window.addEventListener('scroll', function(){
+            if (window.scrollY > 300) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        });
+    }
+})();
+</script>
+
 <?php if (get_theme_mod('enable_dark_toggle', true)) : ?>
 <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Cambiar modo oscuro" title="Modo Oscuro / Claro">&#9790;</button>
 <script>
