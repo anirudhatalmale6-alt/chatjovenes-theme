@@ -181,12 +181,13 @@ img {
     display: flex;
     align-items: center;
     margin-left: auto;
+    margin-right: 12px;
 }
 
 .main-nav ul {
     display: flex;
     list-style: none;
-    gap: 8px;
+    gap: 10px;
     justify-content: flex-end;
     align-items: center;
 }
@@ -871,7 +872,6 @@ body.dark-mode .related-room-link {
     line-height: 1.8;
     color: var(--text-light);
     margin-bottom: 12px;
-    max-width: 900px;
 }
 
 .footer-about p:last-child {
