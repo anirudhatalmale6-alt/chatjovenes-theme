@@ -41,8 +41,8 @@ add_action('after_setup_theme', 'chatjovenes_setup');
 
 // Enqueue styles and scripts
 function chatjovenes_enqueue() {
-    wp_enqueue_style('chatjovenes-style', get_stylesheet_uri(), array(), '1.7.0');
-    wp_enqueue_script('chatjovenes-script', get_template_directory_uri() . '/js/main.js', array(), '1.7.0', true);
+    wp_enqueue_style('chatjovenes-style', get_stylesheet_uri(), array(), '1.8.0');
+    wp_enqueue_script('chatjovenes-script', get_template_directory_uri() . '/js/main.js', array(), '1.8.0', true);
 }
 add_action('wp_enqueue_scripts', 'chatjovenes_enqueue');
 
@@ -148,6 +148,7 @@ function chatjovenes_room_meta_callback($post) {
     $users_online = get_post_meta($post->ID, '_users_online', true);
     $featured = get_post_meta($post->ID, '_featured_room', true);
     $hide_title = get_post_meta($post->ID, '_hide_title', true);
+    $hide_excerpt = get_post_meta($post->ID, '_hide_excerpt', true);
     ?>
     <table class="form-table">
         <tr>
@@ -182,6 +183,15 @@ function chatjovenes_room_meta_callback($post) {
                 </label>
             </td>
         </tr>
+        <tr>
+            <th><label for="hide_excerpt">Ocultar Extracto</label></th>
+            <td>
+                <label>
+                    <input type="checkbox" id="hide_excerpt" name="hide_excerpt" value="1" <?php checked($hide_excerpt, '1'); ?>>
+                    No mostrar el extracto en las tarjetas
+                </label>
+            </td>
+        </tr>
     </table>
     <?php
 }
@@ -199,6 +209,7 @@ function chatjovenes_save_room_meta($post_id) {
     }
     update_post_meta($post_id, '_featured_room', isset($_POST['featured_room']) ? '1' : '0');
     update_post_meta($post_id, '_hide_title', isset($_POST['hide_title']) ? '1' : '0');
+    update_post_meta($post_id, '_hide_excerpt', isset($_POST['hide_excerpt']) ? '1' : '0');
 }
 add_action('save_post_chat_room', 'chatjovenes_save_room_meta');
 
@@ -539,6 +550,97 @@ function chatjovenes_customizer($wp_customize) {
             'type'    => 'url',
         ));
     }
+
+    // Normas de la Sala
+    $wp_customize->add_section('chatjovenes_normas', array(
+        'title'    => 'Normas de la Sala',
+        'priority' => 45,
+    ));
+
+    $wp_customize->add_setting('normas_enabled', array(
+        'default'           => true,
+        'sanitize_callback' => 'wp_validate_boolean',
+    ));
+    $wp_customize->add_control('normas_enabled', array(
+        'label'   => 'Mostrar seccion de Normas',
+        'section' => 'chatjovenes_normas',
+        'type'    => 'checkbox',
+    ));
+
+    $wp_customize->add_setting('normas_title', array(
+        'default'           => 'Normas de la sala',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('normas_title', array(
+        'label'   => 'Titulo',
+        'section' => 'chatjovenes_normas',
+        'type'    => 'text',
+    ));
+
+    $wp_customize->add_setting('normas_subtitle', array(
+        'default'           => 'Reglas claras, conversacion sana.',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('normas_subtitle', array(
+        'label'   => 'Subtitulo',
+        'section' => 'chatjovenes_normas',
+        'type'    => 'text',
+    ));
+
+    for ($i = 1; $i <= 4; $i++) {
+        $defaults_title = array(
+            1 => 'Sin registro, pero con respeto.',
+            2 => 'No compartas datos de terceros.',
+            3 => 'Se educado con la moderacion.',
+            4 => 'Spam, insultos y contenido sexual explicito = ban.',
+        );
+        $defaults_text = array(
+            1 => 'Es una sala publica. Trata a los demas como te gustaria que te tratasen a ti.',
+            2 => 'Direcciones, telefonos o informacion personal de otras personas — esta prohibido.',
+            3 => 'Los moderadores estan para ayudarte. Si tienes una duda o un problema, escribeles privado.',
+            4 => 'Las salas son para conocer gente, no para promocionar ni para faltar al respeto.',
+        );
+
+        $wp_customize->add_setting("normas_rule_{$i}_title", array(
+            'default'           => $defaults_title[$i],
+            'sanitize_callback' => 'sanitize_text_field',
+        ));
+        $wp_customize->add_control("normas_rule_{$i}_title", array(
+            'label'   => "Regla {$i} - Titulo",
+            'section' => 'chatjovenes_normas',
+            'type'    => 'text',
+        ));
+
+        $wp_customize->add_setting("normas_rule_{$i}_text", array(
+            'default'           => $defaults_text[$i],
+            'sanitize_callback' => 'sanitize_text_field',
+        ));
+        $wp_customize->add_control("normas_rule_{$i}_text", array(
+            'label'   => "Regla {$i} - Texto",
+            'section' => 'chatjovenes_normas',
+            'type'    => 'textarea',
+        ));
+    }
+
+    $wp_customize->add_setting('normas_box_title', array(
+        'default'           => 'Servicio gratuito, siempre',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('normas_box_title', array(
+        'label'   => 'Cuadro destacado - Titulo',
+        'section' => 'chatjovenes_normas',
+        'type'    => 'text',
+    ));
+
+    $wp_customize->add_setting('normas_box_text', array(
+        'default'           => 'Nuestro servicio de chat es gratuito y lo sera siempre. Sin email, sin telefono, sin rastro. Si ves algo que no deberia estar pasando, avisa a un moderador desde el propio chat.',
+        'sanitize_callback' => 'sanitize_textarea_field',
+    ));
+    $wp_customize->add_control('normas_box_text', array(
+        'label'   => 'Cuadro destacado - Texto',
+        'section' => 'chatjovenes_normas',
+        'type'    => 'textarea',
+    ));
 
     // License
     $wp_customize->add_section('chatjovenes_license', array(

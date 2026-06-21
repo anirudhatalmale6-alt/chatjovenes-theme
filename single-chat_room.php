@@ -58,7 +58,7 @@
 
             <?php if (get_the_content()) : ?>
             <div class="post-content" style="margin-top: 30px; padding: 24px; background: var(--bg-section); border-radius: 12px;">
-                <h2 style="font-size: 22px; margin-bottom: 12px;">Descripcion de la sala <?php the_title(); ?></h2>
+                <h2 style="font-size: 22px; margin-bottom: 12px;">Descripcion Sala de Chat <?php the_title(); ?></h2>
                 <?php the_content(); ?>
             </div>
             <?php endif; ?>
@@ -82,7 +82,7 @@
                 if ($related->have_posts()) :
             ?>
             <section class="related-rooms-section">
-                <h2 class="section-title" style="font-size: 20px;">Salas Relacionadas:</h2>
+                <h2 class="section-title" style="font-size: 20px;">Salas de chat relacionadas:</h2>
                 <div class="related-rooms-links">
                     <?php while ($related->have_posts()) : $related->the_post(); ?>
                         <a href="<?php the_permalink(); ?>" class="related-room-link"><?php the_title(); ?></a>

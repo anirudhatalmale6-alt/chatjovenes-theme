@@ -48,7 +48,7 @@
         ?>
         <section class="rooms-section">
             <div class="container">
-                <h2 class="section-title">Salas Recomendadas</h2>
+                <h2 class="section-title">Salas de chat recomendadas</h2>
                 <p class="section-subtitle">Las salas mas populares de nuestra comunidad</p>
                 <div class="rooms-grid">
                     <?php while ($featured_rooms->have_posts()) : $featured_rooms->the_post(); ?>
@@ -63,8 +63,11 @@
                             </a>
                         <?php endif; ?>
                         <div class="room-card-body">
-                            <h3 class="room-card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-                            <?php if (has_excerpt()) : ?>
+                            <h3 class="room-card-title"><a href="<?php the_permalink(); ?>"><span class="chat-icon"></span><?php the_title(); ?></a></h3>
+                            <?php
+                            $hide_excerpt = get_post_meta(get_the_ID(), '_hide_excerpt', true);
+                            if (has_excerpt() && (!$hide_excerpt || $hide_excerpt === '0' || $hide_excerpt === '')) :
+                            ?>
                                 <p class="room-card-desc"><?php echo esc_html(get_the_excerpt()); ?></p>
                             <?php endif; ?>
                             <div class="room-card-meta">
@@ -100,6 +103,7 @@
                 <div class="categories-grid">
                     <?php foreach ($categories as $cat) :
                         $cat_image = get_term_meta($cat->term_id, 'category_image', true);
+                        $cat_desc = term_description($cat->term_id, 'room_category');
                     ?>
                     <a href="<?php echo esc_url(get_term_link($cat)); ?>" class="category-card">
                         <?php if ($cat_image) : ?>
@@ -108,8 +112,10 @@
                             <div class="category-card-image" style="background: linear-gradient(135deg, var(--primary-light), var(--primary)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 28px; font-weight: 700;"><?php echo esc_html(mb_substr($cat->name, 0, 2)); ?></div>
                         <?php endif; ?>
                         <div class="category-card-body">
-                            <h3 class="category-card-title"><?php echo esc_html($cat->name); ?></h3>
-                            <p class="category-card-count"><?php echo $cat->count; ?> salas</p>
+                            <h3 class="category-card-title"><span class="folder-icon"></span><?php echo esc_html($cat->name); ?> <span class="category-card-count"><?php echo $cat->count; ?> salas</span></h3>
+                            <?php if ($cat_desc) : ?>
+                                <p class="category-card-desc"><?php echo esc_html(wp_strip_all_tags(wp_trim_words(wp_strip_all_tags($cat_desc), 15, '...'))); ?></p>
+                            <?php endif; ?>
                             <span class="room-card-btn" style="margin-top: 10px;">Entrar</span>
                         </div>
                     </a>
@@ -194,7 +200,7 @@
         ?>
         <section class="news-section">
             <div class="container">
-                <h2 class="section-title">Noticias</h2>
+                <h2 class="section-title">Noticias del chat</h2>
                 <p class="section-subtitle">Las ultimas novedades de nuestra comunidad</p>
                 <div class="news-grid">
                     <?php while ($news->have_posts()) : $news->the_post(); ?>

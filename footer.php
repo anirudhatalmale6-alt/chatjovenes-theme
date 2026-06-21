@@ -1,3 +1,48 @@
+<!-- NORMAS DE LA SALA (all pages) -->
+<?php if (get_theme_mod('normas_enabled', true)) : ?>
+<section class="normas-section">
+    <div class="container">
+        <h2 class="normas-title"><?php echo esc_html(get_theme_mod('normas_title', 'Normas de la sala')); ?></h2>
+        <p class="normas-subtitle"><?php echo esc_html(get_theme_mod('normas_subtitle', 'Reglas claras, conversacion sana.')); ?></p>
+        <div class="normas-content">
+            <div class="normas-rules">
+                <?php
+                $rule_defaults_title = array(
+                    1 => 'Sin registro, pero con respeto.',
+                    2 => 'No compartas datos de terceros.',
+                    3 => 'Se educado con la moderacion.',
+                    4 => 'Spam, insultos y contenido sexual explicito = ban.',
+                );
+                $rule_defaults_text = array(
+                    1 => 'Es una sala publica. Trata a los demas como te gustaria que te tratasen a ti.',
+                    2 => 'Direcciones, telefonos o informacion personal de otras personas — esta prohibido.',
+                    3 => 'Los moderadores estan para ayudarte. Si tienes una duda o un problema, escribeles privado.',
+                    4 => 'Las salas son para conocer gente, no para promocionar ni para faltar al respeto.',
+                );
+                for ($i = 1; $i <= 4; $i++) :
+                    $rule_title = get_theme_mod("normas_rule_{$i}_title", $rule_defaults_title[$i]);
+                    $rule_text = get_theme_mod("normas_rule_{$i}_text", $rule_defaults_text[$i]);
+                    if ($rule_title || $rule_text) :
+                ?>
+                <div class="norma-item">
+                    <span class="norma-check">&#10003;</span>
+                    <div class="norma-text">
+                        <?php if ($rule_title) : ?><strong><?php echo esc_html($rule_title); ?></strong> <?php endif; ?>
+                        <?php echo esc_html($rule_text); ?>
+                    </div>
+                </div>
+                <?php endif; endfor; ?>
+            </div>
+            <div class="normas-box">
+                <div class="normas-box-icon">&#9888;</div>
+                <h3><?php echo esc_html(get_theme_mod('normas_box_title', 'Servicio gratuito, siempre')); ?></h3>
+                <p><?php echo esc_html(get_theme_mod('normas_box_text', 'Nuestro servicio de chat es gratuito y lo sera siempre. Sin email, sin telefono, sin rastro. Si ves algo que no deberia estar pasando, avisa a un moderador desde el propio chat.')); ?></p>
+            </div>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
 <!-- ABOUT TEXT ABOVE FOOTER (only on homepage) -->
 <?php if (is_front_page()) : ?>
 <section class="footer-about">

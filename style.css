@@ -3,7 +3,7 @@ Theme Name: ChatJovenes Theme
 Theme URI: https://chatjovenes.net
 Description: Custom chat community theme for ChatJovenes - Spanish chat rooms platform
 Author: Anirudha Talmale
-Version: 1.2.0
+Version: 1.3.0
 License: Proprietary
 Text Domain: chatjovenes
 */
@@ -369,6 +369,18 @@ img {
     color: var(--primary);
 }
 
+/* Chat bubble icon on room cards */
+.chat-icon {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+    vertical-align: middle;
+    background: var(--primary);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z'/%3E%3C/svg%3E") no-repeat center;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z'/%3E%3C/svg%3E") no-repeat center;
+}
+
 .room-card-desc {
     font-size: 14px;
     color: var(--text-light);
@@ -481,10 +493,47 @@ img {
     color: var(--primary);
 }
 
+/* Folder icon on category cards */
+.folder-icon {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+    vertical-align: middle;
+    background: var(--primary);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z'/%3E%3C/svg%3E") no-repeat center;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z'/%3E%3C/svg%3E") no-repeat center;
+}
+
 .category-card-count {
     font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 4px;
+    color: var(--accent);
+    font-weight: 400;
+    margin-left: 6px;
+}
+
+.category-card-desc {
+    font-size: 14px;
+    color: var(--text-light);
+    line-height: 1.5;
+    margin-top: 6px;
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 42px;
+    text-align: left;
+}
+
+.category-card-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 140px;
+}
+
+.category-card-body .room-card-btn {
+    margin-top: auto !important;
 }
 
 /* ===== CATEGORY HEADER ===== */
@@ -1360,6 +1409,140 @@ body.dark-mode .chat-breadcrumb .current {
 
     .chat-embed-wrapper iframe {
         height: 550px;
+    }
+}
+
+/* ===== NORMAS SECTION ===== */
+.normas-section {
+    padding: 50px 0;
+    border-top: 1px solid var(--border);
+}
+
+.normas-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+
+.normas-subtitle {
+    font-size: 15px;
+    color: var(--text-light);
+    margin-bottom: 30px;
+}
+
+.normas-content {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+    align-items: start;
+}
+
+.normas-rules {
+    background: var(--bg-section);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    border: 1px solid var(--border);
+}
+
+.norma-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.norma-item:last-child {
+    border-bottom: none;
+}
+
+.norma-check {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    background: #22c55e;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+.norma-text {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.norma-text strong {
+    color: var(--text);
+}
+
+.normas-box {
+    background: var(--bg-section);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+}
+
+.normas-box-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    color: var(--accent);
+}
+
+.normas-box h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 12px;
+}
+
+.normas-box p {
+    font-size: 15px;
+    color: var(--text-light);
+    line-height: 1.7;
+}
+
+body.dark-mode .normas-section {
+    border-color: #2d3748;
+}
+
+body.dark-mode .normas-rules {
+    background: #1e293b;
+    border-color: #2d3748;
+}
+
+body.dark-mode .norma-item {
+    border-color: #2d3748;
+}
+
+body.dark-mode .norma-text {
+    color: #e2e8f0;
+}
+
+body.dark-mode .norma-text strong {
+    color: #e2e8f0;
+}
+
+body.dark-mode .normas-box {
+    background: #1e293b;
+    border-color: #2d3748;
+    border-left-color: var(--accent);
+}
+
+body.dark-mode .normas-title {
+    color: #e2e8f0;
+}
+
+@media (max-width: 768px) {
+    .normas-content {
+        grid-template-columns: 1fr;
     }
 }
 
