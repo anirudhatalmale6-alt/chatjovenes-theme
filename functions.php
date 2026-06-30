@@ -41,8 +41,8 @@ add_action('after_setup_theme', 'chatjovenes_setup');
 
 // Enqueue styles and scripts
 function chatjovenes_enqueue() {
-    wp_enqueue_style('chatjovenes-style', get_stylesheet_uri(), array(), '1.9.4');
-    wp_enqueue_script('chatjovenes-script', get_template_directory_uri() . '/js/main.js', array(), '1.9.4', true);
+    wp_enqueue_style('chatjovenes-style', get_stylesheet_uri(), array(), '2.0.0');
+    wp_enqueue_script('chatjovenes-script', get_template_directory_uri() . '/js/main.js', array(), '2.0.0', true);
 }
 add_action('wp_enqueue_scripts', 'chatjovenes_enqueue');
 
@@ -162,6 +162,9 @@ function chatjovenes_room_meta_callback($post) {
     $featured = get_post_meta($post->ID, '_featured_room', true);
     $hide_title = get_post_meta($post->ID, '_hide_title', true);
     $hide_excerpt = get_post_meta($post->ID, '_hide_excerpt', true);
+    $show_radio = get_post_meta($post->ID, '_show_radio', true);
+    $radio_embed = get_post_meta($post->ID, '_radio_embed_code', true);
+    $radio_url = get_post_meta($post->ID, '_radio_stream_url', true);
     ?>
     <table class="form-table">
         <tr>
@@ -205,6 +208,29 @@ function chatjovenes_room_meta_callback($post) {
                 </label>
             </td>
         </tr>
+        <tr>
+            <th><label for="show_radio">Mostrar Radio</label></th>
+            <td>
+                <label>
+                    <input type="checkbox" id="show_radio" name="show_radio" value="1" <?php checked($show_radio, '1'); ?>>
+                    Mostrar reproductor de radio debajo del chat
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="radio_embed_code">Radio - Codigo Embed</label></th>
+            <td>
+                <textarea id="radio_embed_code" name="radio_embed_code" rows="3" class="large-text code"><?php echo esc_textarea($radio_embed); ?></textarea>
+                <p class="description">Pega aqui el codigo embed/iframe del reproductor de radio (tiene prioridad sobre la URL)</p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="radio_stream_url">Radio - URL del Streaming</label></th>
+            <td>
+                <input type="url" id="radio_stream_url" name="radio_stream_url" value="<?php echo esc_attr($radio_url); ?>" class="large-text">
+                <p class="description">URL directa del streaming de radio (se usa si no hay codigo embed)</p>
+            </td>
+        </tr>
     </table>
     <?php
 }
@@ -223,6 +249,13 @@ function chatjovenes_save_room_meta($post_id) {
     update_post_meta($post_id, '_featured_room', isset($_POST['featured_room']) ? '1' : '0');
     update_post_meta($post_id, '_hide_title', isset($_POST['hide_title']) ? '1' : '0');
     update_post_meta($post_id, '_hide_excerpt', isset($_POST['hide_excerpt']) ? '1' : '0');
+    update_post_meta($post_id, '_show_radio', isset($_POST['show_radio']) ? '1' : '0');
+    if (isset($_POST['radio_embed_code'])) {
+        update_post_meta($post_id, '_radio_embed_code', chatjovenes_sanitize_embed($_POST['radio_embed_code']));
+    }
+    if (isset($_POST['radio_stream_url'])) {
+        update_post_meta($post_id, '_radio_stream_url', esc_url_raw($_POST['radio_stream_url']));
+    }
 }
 add_action('save_post_chat_room', 'chatjovenes_save_room_meta');
 
@@ -493,6 +526,63 @@ function chatjovenes_customizer($wp_customize) {
         'section' => 'chatjovenes_radio',
         'type'    => 'text',
     ));
+
+    // Global Radio Bar
+    $wp_customize->add_section('chatjovenes_radio_bar', array(
+        'title'    => 'Barra de Radio Global',
+        'priority' => 37,
+    ));
+
+    $wp_customize->add_setting('radio_bar_enabled', array(
+        'default'           => false,
+        'sanitize_callback' => 'wp_validate_boolean',
+    ));
+    $wp_customize->add_control('radio_bar_enabled', array(
+        'label'       => 'Activar barra de radio global',
+        'description' => 'Muestra una barra fija con radio en toda la web',
+        'section'     => 'chatjovenes_radio_bar',
+        'type'        => 'checkbox',
+    ));
+
+    $wp_customize->add_setting('radio_bar_embed', array(
+        'default'           => '',
+        'sanitize_callback' => 'chatjovenes_sanitize_embed',
+    ));
+    $wp_customize->add_control('radio_bar_embed', array(
+        'label'       => 'Codigo Embed del reproductor',
+        'description' => 'Pega el iframe/embed del reproductor de radio (tiene prioridad sobre la URL)',
+        'section'     => 'chatjovenes_radio_bar',
+        'type'        => 'textarea',
+    ));
+
+    $wp_customize->add_setting('radio_bar_stream_url', array(
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control('radio_bar_stream_url', array(
+        'label'       => 'URL del Streaming',
+        'description' => 'URL directa del streaming (se usa si no hay codigo embed)',
+        'section'     => 'chatjovenes_radio_bar',
+        'type'        => 'url',
+    ));
+
+    $wp_customize->add_setting('radio_bar_bg_color', array(
+        'default'           => '#1e293b',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'radio_bar_bg_color', array(
+        'label'   => 'Color de fondo de la barra',
+        'section' => 'chatjovenes_radio_bar',
+    )));
+
+    $wp_customize->add_setting('radio_bar_text_color', array(
+        'default'           => '#ffffff',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'radio_bar_text_color', array(
+        'label'   => 'Color de texto de la barra',
+        'section' => 'chatjovenes_radio_bar',
+    )));
 
     // Colors
     $wp_customize->add_setting('primary_color', array(
@@ -817,6 +907,50 @@ function chatjovenes_save_license_domains($value) {
     return $value;
 }
 add_filter('pre_set_theme_mod_license_domains', 'chatjovenes_save_license_domains');
+
+// Image sitemap support
+add_filter('wp_sitemaps_posts_entry', 'chatjovenes_sitemap_add_images', 10, 3);
+
+function chatjovenes_sitemap_add_images($sitemap_entry, $post, $post_type) {
+    if ($post_type !== 'chat_room' && $post_type !== 'post') return $sitemap_entry;
+
+    $images = array();
+
+    if (has_post_thumbnail($post->ID)) {
+        $thumb_url = get_the_post_thumbnail_url($post->ID, 'full');
+        if ($thumb_url) {
+            $images[] = array('loc' => $thumb_url);
+        }
+    }
+
+    $content = $post->post_content;
+    if ($content) {
+        preg_match_all('/<img[^>]+src=["\']([^"\']+)["\']/', $content, $matches);
+        if (!empty($matches[1])) {
+            foreach ($matches[1] as $img_url) {
+                $images[] = array('loc' => $img_url);
+            }
+        }
+    }
+
+    if (!empty($images)) {
+        $sitemap_entry['images'] = $images;
+    }
+
+    return $sitemap_entry;
+}
+
+function chatjovenes_sitemap_add_tax_images($sitemap_entry, $term, $taxonomy) {
+    if ($taxonomy !== 'room_category') return $sitemap_entry;
+
+    $cat_image = get_term_meta($term->term_id, 'category_image', true);
+    if ($cat_image) {
+        $sitemap_entry['images'] = array(array('loc' => $cat_image));
+    }
+
+    return $sitemap_entry;
+}
+add_filter('wp_sitemaps_taxonomies_entry', 'chatjovenes_sitemap_add_tax_images', 10, 3);
 
 // Flush rewrite rules on activation for new permalink slugs
 function chatjovenes_activate() {

@@ -175,6 +175,28 @@
 </script>
 <?php endif; ?>
 
+<?php
+$radio_bar_enabled = get_theme_mod('radio_bar_enabled', false);
+$radio_bar_embed = get_theme_mod('radio_bar_embed', '');
+$radio_bar_stream = get_theme_mod('radio_bar_stream_url', '');
+if ($radio_bar_enabled && ($radio_bar_embed || $radio_bar_stream)) :
+    $bar_bg = get_theme_mod('radio_bar_bg_color', '#1e293b');
+    $bar_text = get_theme_mod('radio_bar_text_color', '#ffffff');
+?>
+<div class="global-radio-bar" style="background: <?php echo esc_attr($bar_bg); ?>; color: <?php echo esc_attr($bar_text); ?>;">
+    <div class="radio-bar-content">
+        <?php if ($radio_bar_embed) : ?>
+            <?php echo $radio_bar_embed; ?>
+        <?php elseif ($radio_bar_stream) : ?>
+            <audio controls autoplay style="background: <?php echo esc_attr($bar_bg); ?>;">
+                <source src="<?php echo esc_url($radio_bar_stream); ?>">
+            </audio>
+        <?php endif; ?>
+    </div>
+</div>
+<script>document.body.classList.add('has-radio-bar');</script>
+<?php endif; ?>
+
 <?php wp_footer(); ?>
 </body>
 </html>

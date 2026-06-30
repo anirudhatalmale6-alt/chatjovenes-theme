@@ -6,6 +6,9 @@
         $users = get_post_meta(get_the_ID(), '_users_online', true);
         $room_cats = get_the_terms(get_the_ID(), 'room_category');
         $hide_title = get_post_meta(get_the_ID(), '_hide_title', true);
+        $show_radio = get_post_meta(get_the_ID(), '_show_radio', true);
+        $radio_embed = get_post_meta(get_the_ID(), '_radio_embed_code', true);
+        $radio_stream_url = get_post_meta(get_the_ID(), '_radio_stream_url', true);
     ?>
 
     <!-- BREADCRUMB -->
@@ -20,7 +23,6 @@
     </nav>
 
     <div class="chat-room-layout">
-        <!-- MAIN CONTENT -->
         <div class="chat-room-main">
             <div class="chat-room-header">
                 <?php if (has_post_thumbnail()) : ?>
@@ -51,8 +53,28 @@
             $room_embed = $xat_embed_room ? $xat_embed_room : $global_embed;
             if ($room_embed) :
             ?>
-            <div class="chat-embed-wrapper" style="margin: 20px 0 30px;">
-                <?php echo $room_embed; ?>
+            <div class="category-chat-box">
+                <div class="category-chat-label">
+                    <span><?php the_title(); ?></span>
+                </div>
+                <div class="chat-embed-wrapper">
+                    <?php echo $room_embed; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <?php if ($show_radio && $show_radio === '1' && ($radio_embed || $radio_stream_url)) : ?>
+            <div class="radio-player-box">
+                <div class="radio-player-label">Radio</div>
+                <div class="radio-player-content">
+                    <?php if ($radio_embed) : ?>
+                        <?php echo $radio_embed; ?>
+                    <?php elseif ($radio_stream_url) : ?>
+                        <audio controls autoplay>
+                            <source src="<?php echo esc_url($radio_stream_url); ?>">
+                        </audio>
+                    <?php endif; ?>
+                </div>
             </div>
             <?php endif; ?>
 
@@ -94,141 +116,6 @@
             endif;
             ?>
         </div>
-
-        <!-- SIDEBAR -->
-        <aside class="chat-room-sidebar">
-            <?php if (is_active_sidebar('sidebar-1')) : ?>
-                <?php dynamic_sidebar('sidebar-1'); ?>
-            <?php else : ?>
-
-            <!-- RELATED ROOMS WIDGET -->
-            <?php
-            if ($room_cats && !is_wp_error($room_cats)) :
-                $cat_ids_sb = wp_list_pluck($room_cats, 'term_id');
-                $sidebar_related = new WP_Query(array(
-                    'post_type'      => 'chat_room',
-                    'posts_per_page' => 8,
-                    'post__not_in'   => array(get_the_ID()),
-                    'tax_query'      => array(
-                        array(
-                            'taxonomy' => 'room_category',
-                            'field'    => 'term_id',
-                            'terms'    => $cat_ids_sb,
-                        ),
-                    ),
-                ));
-                if ($sidebar_related->have_posts()) :
-            ?>
-            <div class="sidebar-widget">
-                <h3 class="sidebar-widget-title">Salas Relacionadas</h3>
-                <ul class="sidebar-room-list">
-                    <?php while ($sidebar_related->have_posts()) : $sidebar_related->the_post(); ?>
-                    <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
-                    <?php endwhile; wp_reset_postdata(); ?>
-                </ul>
-            </div>
-            <?php endif; endif; ?>
-
-            <!-- RECENT POSTS -->
-            <?php
-            $recent_posts = new WP_Query(array(
-                'post_type'      => 'post',
-                'posts_per_page' => 5,
-            ));
-            if ($recent_posts->have_posts()) :
-            ?>
-            <div class="sidebar-widget">
-                <h3 class="sidebar-widget-title">Publicaciones Recientes</h3>
-                <ul class="sidebar-room-list">
-                    <?php while ($recent_posts->have_posts()) : $recent_posts->the_post(); ?>
-                    <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
-                    <?php endwhile; wp_reset_postdata(); ?>
-                </ul>
-            </div>
-            <?php endif; ?>
-
-            <!-- RECENT COMMENTS -->
-            <?php
-            $recent_comments = get_comments(array(
-                'number' => 5,
-                'status' => 'approve',
-            ));
-            if (!empty($recent_comments)) :
-            ?>
-            <div class="sidebar-widget">
-                <h3 class="sidebar-widget-title">Comentarios Recientes</h3>
-                <ul class="sidebar-room-list">
-                    <?php foreach ($recent_comments as $comment) : ?>
-                    <li>
-                        <a href="<?php echo esc_url(get_comment_link($comment)); ?>">
-                            <?php echo esc_html($comment->comment_author); ?> en <?php echo esc_html(get_the_title($comment->comment_post_ID)); ?>
-                        </a>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-            <?php endif; ?>
-
-            <!-- TOP CHANNELS -->
-            <?php
-            $top_channels = new WP_Query(array(
-                'post_type'      => 'chat_room',
-                'posts_per_page' => 8,
-                'orderby'        => 'comment_count',
-                'order'          => 'DESC',
-            ));
-            if ($top_channels->have_posts()) :
-            ?>
-            <div class="sidebar-widget">
-                <h3 class="sidebar-widget-title">Top Canales</h3>
-                <ul class="sidebar-room-list">
-                    <?php while ($top_channels->have_posts()) : $top_channels->the_post(); ?>
-                    <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
-                    <?php endwhile; wp_reset_postdata(); ?>
-                </ul>
-            </div>
-            <?php endif; ?>
-
-            <!-- LATEST CHANNELS -->
-            <?php
-            $latest_channels = new WP_Query(array(
-                'post_type'      => 'chat_room',
-                'posts_per_page' => 8,
-                'orderby'        => 'date',
-                'order'          => 'DESC',
-            ));
-            if ($latest_channels->have_posts()) :
-            ?>
-            <div class="sidebar-widget">
-                <h3 class="sidebar-widget-title">Ultimos Canales</h3>
-                <ul class="sidebar-room-list">
-                    <?php while ($latest_channels->have_posts()) : $latest_channels->the_post(); ?>
-                    <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
-                    <?php endwhile; wp_reset_postdata(); ?>
-                </ul>
-            </div>
-            <?php endif; ?>
-
-            <!-- CATEGORIES -->
-            <?php
-            $room_categories = get_terms(array(
-                'taxonomy'   => 'room_category',
-                'hide_empty' => false,
-            ));
-            if (!is_wp_error($room_categories) && !empty($room_categories)) :
-            ?>
-            <div class="sidebar-widget">
-                <h3 class="sidebar-widget-title">Categorias</h3>
-                <ul class="sidebar-room-list">
-                    <?php foreach ($room_categories as $cat) : ?>
-                    <li><a href="<?php echo esc_url(get_term_link($cat)); ?>"><?php echo esc_html($cat->name); ?> <span class="sidebar-count">(<?php echo $cat->count; ?>)</span></a></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-            <?php endif; ?>
-
-            <?php endif; ?>
-        </aside>
     </div>
 
     <?php endwhile; endif; ?>

@@ -3,7 +3,7 @@ Theme Name: ChatJovenes Theme
 Theme URI: https://chatjovenes.net
 Description: Custom chat community theme for ChatJovenes - Spanish chat rooms platform
 Author: Anirudha Talmale
-Version: 1.3.0
+Version: 1.4.0
 License: Proprietary
 Text Domain: chatjovenes
 */
@@ -539,35 +539,29 @@ img {
 
 /* ===== CATEGORY HEADER ===== */
 .category-header {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 24px;
     padding: 30px;
     background: var(--bg-section);
     border-radius: var(--radius-lg);
     margin-bottom: 20px;
+    overflow: hidden;
 }
 
 .category-header-image {
-    flex: 0 0 180px;
-    width: 180px;
-    height: 160px;
+    float: left;
+    width: 200px;
+    height: auto;
     border-radius: var(--radius);
     overflow: hidden;
     border: 3px solid #fff;
     box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    margin: 0 24px 16px 0;
 }
 
 .category-header-image img {
     width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: cover;
     display: block;
-}
-
-.category-header-info {
-    flex: 1;
 }
 
 .category-header-info h1 {
@@ -581,7 +575,7 @@ img {
     color: var(--text-light);
     font-size: 15px;
     line-height: 1.6;
-    margin: 0;
+    margin: 0 0 12px 0;
 }
 
 .category-chat-box {
@@ -603,6 +597,11 @@ img {
 .category-chat-box .chat-embed-wrapper {
     border-radius: 0;
     box-shadow: none;
+    max-width: 100%;
+}
+
+.chat-room-main .chat-embed-wrapper {
+    max-width: 100%;
 }
 
 body.dark-mode .category-header {
@@ -1122,10 +1121,8 @@ body.dark-mode .footer-about {
 }
 
 .chat-room-layout {
-    display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 30px;
-    align-items: start;
+    display: block;
+    max-width: 100%;
 }
 
 .chat-room-header {
@@ -1336,7 +1333,7 @@ body.dark-mode .chat-breadcrumb .current {
     }
 
     .chat-room-layout {
-        grid-template-columns: 1fr;
+        display: block;
     }
 
     .chat-room-header {
@@ -1349,17 +1346,16 @@ body.dark-mode .chat-breadcrumb .current {
     }
 
     .category-header {
-        flex-direction: column;
         padding: 0;
         background: none;
-        gap: 16px;
     }
 
     .category-header-image {
-        flex: none;
+        float: none;
         width: 100%;
         height: auto;
         border-radius: var(--radius-lg);
+        margin: 0 0 16px 0;
     }
 
     .category-header-image img {
@@ -1586,6 +1582,77 @@ body.dark-mode .normas-title {
     .normas-content {
         grid-template-columns: 1fr;
     }
+}
+
+/* ===== RADIO PLAYER BOX (per room/category) ===== */
+.radio-player-box {
+    background: var(--bg-section);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-top: 20px;
+    box-shadow: var(--shadow);
+}
+
+.radio-player-label {
+    padding: 12px 20px;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.radio-player-content {
+    width: 100%;
+}
+
+.radio-player-content iframe {
+    width: 100%;
+    border: none;
+    display: block;
+}
+
+.radio-player-content audio {
+    width: 100%;
+    display: block;
+}
+
+body.dark-mode .radio-player-box {
+    background: #1e293b;
+}
+
+/* ===== GLOBAL RADIO BAR ===== */
+.global-radio-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9998;
+    padding: 0;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.15);
+}
+
+.global-radio-bar .radio-bar-content {
+    width: 100%;
+}
+
+.global-radio-bar .radio-bar-content iframe {
+    width: 100%;
+    border: none;
+    display: block;
+}
+
+.global-radio-bar .radio-bar-content audio {
+    width: 100%;
+    display: block;
+    padding: 10px 20px;
+}
+
+.has-radio-bar .dark-mode-toggle {
+    bottom: 80px;
+}
+
+.has-radio-bar .scroll-top-btn {
+    bottom: 140px;
 }
 
 /* ===== WORDPRESS DEFAULTS ===== */
