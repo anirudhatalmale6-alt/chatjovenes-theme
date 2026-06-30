@@ -666,6 +666,17 @@ function chatjovenes_customizer($wp_customize) {
         'type'    => 'checkbox',
     ));
 
+    $wp_customize->add_setting('enable_scroll_top', array(
+        'default'           => true,
+        'sanitize_callback' => 'wp_validate_boolean',
+    ));
+    $wp_customize->add_control('enable_scroll_top', array(
+        'label'       => 'Mostrar boton Ir Arriba',
+        'description' => 'Muestra el boton flotante para ir arriba al hacer scroll',
+        'section'     => 'chatjovenes_darkmode',
+        'type'        => 'checkbox',
+    ));
+
     // Social Media
     $wp_customize->add_section('chatjovenes_social', array(
         'title'    => 'Redes Sociales',
