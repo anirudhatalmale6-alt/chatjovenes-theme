@@ -68,7 +68,7 @@
                 <div class="radio-player-label">Radio</div>
                 <div class="radio-player-content">
                     <?php if ($radio_embed) : ?>
-                        <?php echo $radio_embed; ?>
+                        <?php echo do_shortcode($radio_embed); ?>
                     <?php elseif ($radio_stream_url) : ?>
                         <audio controls autoplay>
                             <source src="<?php echo esc_url($radio_stream_url); ?>">
